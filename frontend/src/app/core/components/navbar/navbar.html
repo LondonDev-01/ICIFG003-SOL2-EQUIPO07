@@ -1,1 +1,24 @@
-<p>navbar works!</p>
+<nav class="navbar">
+
+  <div class="logo-container">
+
+    <img
+      src="logo-biblioteca.png"
+      alt="Logo Biblioteca"
+      class="logo-img">
+
+  </div>
+
+  <div class="nav-links">
+    <a
+       routerLink=""
+      routerLinkActive="active-link"
+      [routerLinkActiveOptions]="{ exact: true }">
+      Inicio
+    </a>
+    <a routerLink="/salas">Salas</a>
+    <a href="#">Ayuda</a>
+    <a href="#">Contacto</a>
+  </div>
+
+</nav>
