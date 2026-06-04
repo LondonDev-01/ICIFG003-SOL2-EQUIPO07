@@ -19,6 +19,7 @@
 .logo-container {
   display: flex;
   align-items: center;
+  gap: 12px;
 }
 
 .logo-img {
@@ -26,6 +27,7 @@
   width: auto;
   object-fit: contain;
 }
+
 
 .logo-icon {
   font-size: 2rem;
