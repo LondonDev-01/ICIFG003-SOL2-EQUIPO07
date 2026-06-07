@@ -1,0 +1,45 @@
+.footer {
+    background: #0a3575;
+    color: white;
+
+    width: 100%;
+
+    padding: 15px 40px;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    box-sizing: border-box;
+    margin-top: 40px;
+}
+
+.footer-left h3 {
+    margin: 0;
+    font-size: 18px;
+}
+
+.footer-center {
+    text-align: center;
+}
+
+.footer-center p {
+    margin: 4px 0;
+    font-size: 14px;
+}
+
+.footer-right {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.social-icons {
+    display: flex;
+    gap: 15px;
+}
+
+.social-icons i {
+    font-size: 28px;
+    cursor: pointer;
+}

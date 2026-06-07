@@ -1,1 +1,117 @@
-<h1>Pantalla Salas funcionando</h1>
+<app-navbar></app-navbar>
+
+<section class="salas-container">
+
+  <h1>Salas de Estudio</h1>
+
+  <p>
+    Encuentra y reserva la sala que mejor se adapte a tus necesidades.
+  </p>
+
+  <div class="filtros">
+
+    <div class="buscar">
+      <label>Buscar sala</label>
+        <input
+            type="text"
+            placeholder="Ej: Sala A101">
+    </div>
+
+    <div class="categoria">
+        <select>
+            <option>Todas</option>
+            <option>Pequeñas</option>
+            <option>Medianas</option>
+            <option>Grandes</option>
+        </select>
+    </div>
+
+    <div class="ordenar">
+        <label>Ordenar por</label>
+        <select>
+            <option>Nombre (A-Z)</option>
+            <option>Capacidad</option>
+        </select>
+    </div>
+
+</div>
+
+  <div class="salas-grid">
+
+    <div class="sala-card">
+      <img src="/salas/sala101.png" alt="Sala A101">
+
+      <h3>Sala A101</h3>
+
+      <p>Capacidad: 6 personas</p>
+      <p>Ubicación: Primer piso</p>
+      <p>Horario: 08:00 - 22:00 hrs</p>
+
+      <button>Reservar</button>
+    </div>
+
+    <div class="sala-card">
+      <img src="/salas/sala202.png" alt="Sala B202">
+      
+      <h3>Sala B202</h3>
+
+      <p>Capacidad: 10 personas</p>
+      <p>Ubicación: Segundo piso</p>
+      <p>Horario: 08:00 - 22:00 hrs</p>
+
+      <button>Reservar</button>
+    </div>
+
+    <div class="sala-card">
+      <img src="/salas/sala303.png" alt="Sala C303">
+
+      <h3>Sala C303</h3>
+
+      <p>Capacidad: 4 personas</p>
+      <p>Ubicación: Tercer piso</p>
+      <p>Horario: 08:00 - 22:00 hrs</p>
+
+      <button>Reservar</button>
+    </div>
+
+    <div class="sala-card">
+        <img src="/salas/sala404.png" alt="Sala D404">
+
+        <h3>Sala D404</h3>
+
+        <p>Capacidad: 8 personas</p>
+        <p>Ubicación: Cuarto piso</p>
+        <p>Horario: 08:00 - 22:00 hrs</p>
+
+        <button>Reservar</button>
+    </div>
+
+    <div class="sala-card">
+        <img src="/salas/sala505.png" alt="Sala E505">
+
+        <h3>Sala E505</h3>
+
+        <p>Capacidad: 8 personas</p>
+        <p>Ubicación: Quinto piso</p>
+        <p>Horario: 08:00 - 22:00 hrs</p>
+
+        <button>Reservar</button>
+    </div>
+
+    <div class="sala-card">
+        <img src="/salas/sala606.png" alt="Sala F606">
+
+        <h3>Sala F606</h3>
+
+        <p>Capacidad: 14 personas</p>
+        <p>Ubicación: Sexto piso</p>
+        <p>Horario: 08:00 - 22:00 hrs</p>
+
+        <button>Reservar</button>
+    </div>
+
+  </div>
+
+</section>
+
+<app-footer></app-footer>
