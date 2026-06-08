@@ -91,11 +91,15 @@
 
     border-radius: 8px;
     width: 120px;
-    
+}
+
+/* Solo capacidad */
+.categoria select {
+    width: 200px;
 }
 
 .categoria {
-    width: 110px;
+    width: 200px;
     
 }
 
