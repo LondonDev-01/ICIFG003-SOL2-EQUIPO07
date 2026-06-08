@@ -4,14 +4,14 @@
 
     width: 100%;
 
-    padding: 15px 40px;
+    padding: 2px 40px;
 
     display: flex;
     justify-content: space-between;
     align-items: center;
 
     box-sizing: border-box;
-    margin-top: 40px;
+    margin-top: 27px;
 }
 
 .footer-left h3 {
