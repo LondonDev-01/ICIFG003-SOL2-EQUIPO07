@@ -19,9 +19,9 @@
         forma rápida, fácil y segura.
       </p>
 
-      <button class="btn-salas">
+      <a routerLink="/salas" class="btn-salas">
         Ver Salas Disponibles
-      </button>
+      </a>
 
     </div>
 
@@ -34,15 +34,18 @@
   <aside class="avisos-card">
 
     <h2>
-      <i class="bi bi-bell"></i>
+      <i class="bi bi-bell-fill"></i>
       Avisos importantes
     </h2>
 
     <div class="aviso">
-       <h3>
+
+      <div class="icono-aviso reloj">
         <i class="bi bi-clock"></i>
-        Horario de biblioteca
-      </h3>
+      </div>
+
+      <div class="contenido-aviso">
+        <h3>Horario de biblioteca</h3>
 
       <p>
         Lun-Vie: 08:00 - 22:00 hrs<br>
@@ -50,29 +53,40 @@
       </p>
     </div>
 
+</div>
+
     <div class="aviso">
-      <h3>
+
+      <div class="icono-aviso mantenimiento">
         <i class="bi bi-wrench"></i>
-        Mantención programada
-      </h3>
+      </div>
 
-      <p>
-        El sábado algunas salas podrían
-        no estar disponibles.
-      </p>
-    </div>
+      <div class="contenido-aviso">
+        <h3>Mantención programada</h3>
+
+        <p>
+          El sábado algunas salas podrían
+          no estar disponibles.
+         </p>
+      </div>
+</div>
 
     <div class="aviso">
-      <h3>
-        <i class="bi bi-megaphone"></i>
-         Nuevas salas disponibles
-      </h3>
 
-      <p>
+     <div class="icono-aviso nuevas">
+       <i class="bi bi-megaphone"></i>
+     </div>
+
+     <div class="contenido-aviso">
+      <h3>Nuevas salas disponibles</h3>
+
+     <p>
         Hemos habilitado nuevas salas
         en el edificio central.
-      </p>
+     </p>
     </div>
+
+</div>
 
   </aside>
 
@@ -81,7 +95,7 @@
   <header class="salas-header">
 
     <h2>
-      <i class="bi bi-star"></i>
+      <i class="bi bi-star-fill"></i>
       Salas destacadas
     </h2>
 

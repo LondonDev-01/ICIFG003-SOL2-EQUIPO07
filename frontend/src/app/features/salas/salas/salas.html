@@ -22,7 +22,7 @@
     </div>
 
     <div class="categoria">
-      <label for="categoriaSala">Categoría</label>
+      <label for="categoriaSala"></label>
 
         <select id="categoriaSala">
             <option>Todas</option>
@@ -45,17 +45,13 @@
 
   <div class="salas-grid">
 
-    <article class="sala-card">
-      <img src="/salas/sala101.png" alt="Sala A101">
-
-      <h3>Sala A101</h3>
-
-      <p>Capacidad: 6 personas</p>
-      <p>Ubicación: Primer piso</p>
-      <p>Horario: 08:00 - 22:00 hrs</p>
-
-      <button>Reservar</button>
-    </article>
+    <app-sala-card
+      nombre="Sala A101"
+      [capacidad]="6"
+      ubicacion="Primer piso"
+      horario="08:00 - 22:00 hrs"
+      imagen="/salas/sala101.png">
+    </app-sala-card>
 
     <article class="sala-card">
       <img src="/salas/sala202.png" alt="Sala B202">
