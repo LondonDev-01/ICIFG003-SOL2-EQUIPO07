@@ -71,13 +71,23 @@
   .navbar {
     flex-direction: column;
     gap: 15px;
+    padding: 15px;
+  }
+
+  .logo-img {
+    height: 55px;
   }
 
   .nav-links {
-    flex-wrap: wrap;
+    display: flex;
     justify-content: center;
+    flex-wrap: wrap;
+    gap: 15px;
+    width: 100%;
   }
 
-  
+  .nav-links a {
+    font-size: 14px;
+  }
 
 }

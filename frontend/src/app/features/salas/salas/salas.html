@@ -1,5 +1,7 @@
 <app-navbar></app-navbar>
 
+<main>
+
 <section class="salas-container">
 
   <h1>Salas de Estudio</h1>
@@ -11,14 +13,18 @@
   <div class="filtros">
 
     <div class="buscar">
-      <label>Buscar sala</label>
+      <label for="buscarSala">Buscar sala</label>
+
         <input
-            type="text"
-            placeholder="Ej: Sala A101">
+          id="buscarSala"
+          type="text"
+          placeholder="Ej: Sala A101">
     </div>
 
     <div class="categoria">
-        <select>
+      <label for="categoriaSala">Categoría</label>
+
+        <select id="categoriaSala">
             <option>Todas</option>
             <option>Pequeñas</option>
             <option>Medianas</option>
@@ -27,8 +33,9 @@
     </div>
 
     <div class="ordenar">
-        <label>Ordenar por</label>
-        <select>
+        <label for="ordenarSala">Ordenar por</label>
+
+        <select id="ordenarSala">
             <option>Nombre (A-Z)</option>
             <option>Capacidad</option>
         </select>
@@ -38,7 +45,7 @@
 
   <div class="salas-grid">
 
-    <div class="sala-card">
+    <article class="sala-card">
       <img src="/salas/sala101.png" alt="Sala A101">
 
       <h3>Sala A101</h3>
@@ -48,9 +55,9 @@
       <p>Horario: 08:00 - 22:00 hrs</p>
 
       <button>Reservar</button>
-    </div>
+    </article>
 
-    <div class="sala-card">
+    <article class="sala-card">
       <img src="/salas/sala202.png" alt="Sala B202">
       
       <h3>Sala B202</h3>
@@ -60,9 +67,9 @@
       <p>Horario: 08:00 - 22:00 hrs</p>
 
       <button>Reservar</button>
-    </div>
+    </article>
 
-    <div class="sala-card">
+    <article class="sala-card">
       <img src="/salas/sala303.png" alt="Sala C303">
 
       <h3>Sala C303</h3>
@@ -72,9 +79,9 @@
       <p>Horario: 08:00 - 22:00 hrs</p>
 
       <button>Reservar</button>
-    </div>
+    </article>
 
-    <div class="sala-card">
+    <article class="sala-card">
         <img src="/salas/sala404.png" alt="Sala D404">
 
         <h3>Sala D404</h3>
@@ -84,9 +91,9 @@
         <p>Horario: 08:00 - 22:00 hrs</p>
 
         <button>Reservar</button>
-    </div>
+    </article>
 
-    <div class="sala-card">
+    <article class="sala-card">
         <img src="/salas/sala505.png" alt="Sala E505">
 
         <h3>Sala E505</h3>
@@ -96,9 +103,9 @@
         <p>Horario: 08:00 - 22:00 hrs</p>
 
         <button>Reservar</button>
-    </div>
+    </article>
 
-    <div class="sala-card">
+    <article class="sala-card">
         <img src="/salas/sala606.png" alt="Sala F606">
 
         <h3>Sala F606</h3>
@@ -108,10 +115,12 @@
         <p>Horario: 08:00 - 22:00 hrs</p>
 
         <button>Reservar</button>
-    </div>
+    </article>
 
   </div>
 
 </section>
+
+</main>
 
 <app-footer></app-footer>

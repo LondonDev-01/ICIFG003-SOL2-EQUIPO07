@@ -295,3 +295,87 @@
 .footer-social i:hover {
     opacity: 0.8;
 }
+
+@media (max-width: 1023px) {
+
+    .info-section {
+        flex-direction: column;
+        align-items: center;
+        padding: 20px;
+    }
+
+    .avisos-card {
+        left: 0;
+        width: 80%;
+    }
+
+    .salas-destacadas {
+        margin-left: 0;
+        width: 100%;
+        transform: none;
+    }
+
+    .salas-grid {
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    .salas-header {
+        margin-right: 0;
+    }
+
+}
+
+@media (max-width: 768px) {
+
+    .hero {
+        height: auto;
+    }
+
+    .hero-content {
+        margin-left: 20px;
+        max-width: 90%;
+        transform: none;
+    }
+
+    .hero-content h1 {
+        font-size: 32px;
+    }
+
+    .hero-content p {
+        font-size: 18px;
+    }
+
+    .info-section {
+        flex-direction: column;
+        padding: 15px;
+    }
+
+    .avisos-card {
+        width: 100%;
+        left: 0;
+    }
+
+    .salas-destacadas {
+        width: 100%;
+        margin-left: 0;
+        transform: none;
+    }
+
+    .salas-grid {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .sala-card {
+        width: 100%;
+        max-width: 350px;
+    }
+
+    .salas-header {
+        margin-right: 0;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+}

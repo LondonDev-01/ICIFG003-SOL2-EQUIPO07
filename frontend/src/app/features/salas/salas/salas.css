@@ -108,7 +108,7 @@
 
 .ordenar {
     width: 170px;
-    transform: translateX(-6px);
+    transform: translateX(-60px);
 }
 
 .buscar,
@@ -133,3 +133,59 @@
     left: -80px;
 }
 
+/* =========================
+   TABLET
+========================= */
+@media (max-width: 1024px) {
+
+    .salas-container {
+        padding: 20px 40px;
+    }
+
+    .salas-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+}
+
+
+/* =========================
+   MOVIL
+========================= */
+@media (max-width: 768px) {
+
+    .salas-container {
+        padding: 20px;
+    }
+
+    .filtros {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 15px;
+    }
+
+    .buscar,
+    .categoria,
+    .ordenar {
+        width: 100%;
+        transform: none;
+    }
+
+    .buscar input {
+        width: 100%;
+    }
+
+    .categoria select,
+    .ordenar select {
+        width: 100%;
+    }
+
+    .categoria select {
+        left: 0;
+    }
+
+    .salas-grid {
+        grid-template-columns: 1fr;
+    }
+
+}
