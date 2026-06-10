@@ -62,7 +62,7 @@
 
 .filtros {
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     gap: 40px;
 }
 
@@ -71,6 +71,7 @@
 .buscar {
     width: 50%;
     flex: 1;
+    margin-top: 1px;
 }
 
 .buscar input {
@@ -132,6 +133,7 @@
     flex-direction: column;
     align-items: flex-start;
     gap: 8px;
+    margin-top: 20px;
 }
 
 .fecha input {
@@ -160,6 +162,7 @@
     padding: 12px 25px;
 
     cursor: pointer;
+    margin-top: 45px;
 }
 
 .barra-superior{
