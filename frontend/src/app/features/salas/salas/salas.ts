@@ -30,6 +30,7 @@ export class Salas implements OnInit {
   salasFiltradas: Sala[] = [];
   textoBusqueda: string = '';
   capacidadSeleccionada: string = '';
+  fechaSeleccionada: string = '';
   ordenSeleccionado: string = 'nombre';
 
   constructor(

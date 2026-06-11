@@ -42,7 +42,7 @@
           id="categoriaSala"
           [(ngModel)]="capacidadSeleccionada">
 
-            <option value="">Todas las capacidades</option>
+            <option value="">Todas</option>
             <option value="4">Hasta 4 personas</option>
             <option value="8">Hasta 8 personas</option>
             <option value="9">Más de 8 personas</option>
@@ -52,11 +52,12 @@
 
     <div class="fecha">
 
-      <label for="fechaSala">Fecha</label>
+      <label for="fechaSala">Fecha (día de consulta)</label>
 
       <input
         type="date"
-        id="fechaSala">
+        id="fechaSala"
+        [(ngModel)]="fechaSeleccionada">
 
     </div>
 
