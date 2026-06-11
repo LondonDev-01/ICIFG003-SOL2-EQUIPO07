@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
 
 @Component({
   selector: 'app-sala-card',
@@ -18,4 +18,17 @@ export class SalaCard {
   @Input() horario = '';
 
   @Input() imagen = '';
+
+  @Output() verReservas = new EventEmitter<void>();
+
+  @Output() reservar = new EventEmitter<void>();
+
+  onVerReservas() {
+    this.verReservas.emit();
+  }
+
+  onReservar() {
+    this.reservar.emit();
+  }
 }
+

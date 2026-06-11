@@ -2,14 +2,19 @@
 
   <img [src]="imagen" [alt]="nombre">
 
-  <h3>{{ nombre }}</h3>
+  <div class="sala-card-content">
+    <h3>{{ nombre }}</h3>
 
-  <p>Capacidad: {{ capacidad }} personas</p>
+    <p>Capacidad: {{ capacidad }} personas</p>
 
-  <p>Ubicación: {{ ubicacion }}</p>
+    <p>Edificio/Ubicación: {{ ubicacion }}</p>
 
-  <p>Horario: {{ horario }}</p>
+    <p>Horario: {{ horario }}</p>
 
-  <button>Reservar</button>
+    <div class="acciones">
+      <button class="btn-reservas" (click)="onVerReservas()">Ver reservas</button>
+      <button class="btn-reservar" (click)="onReservar()">Reservar</button>
+    </div>
+  </div>
 
 </div>
