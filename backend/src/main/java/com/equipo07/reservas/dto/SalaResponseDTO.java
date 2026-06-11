@@ -10,7 +10,6 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class SalaResponseDTO {
-
     private Integer id;
     private String codigoSala;
     private String nombreSala;
@@ -18,5 +17,6 @@ public class SalaResponseDTO {
     private Integer piso;
     private String descripcion;
     private String estado;
-
+    private Integer idEdificio;
+    private String nombreEdificio;
 }
