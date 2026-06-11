@@ -1,0 +1,61 @@
+<div class="reserva-form-card">
+  <h2>Solicitud de Reserva</h2>
+  <p *ngIf="salaSeleccionada">Sala seleccionada: <strong>{{ salaSeleccionada.nombreSala }}</strong></p>
+
+  <form [formGroup]="reservaForm" (ngSubmit)="onSubmit()">
+    
+    <div class="form-group autocomplete">
+      <label>Estudiante (Nombre o RUT)</label>
+      <input type="text" formControlName="estudiante" placeholder="Buscar estudiante...">
+      <ul class="autocomplete-items" *ngIf="estudiantesFiltrados.length > 0">
+        <li *ngFor="let est of estudiantesFiltrados" (click)="seleccionarEstudiante(est)">
+          {{ est.nombre }} - {{ est.rut }}
+        </li>
+      </ul>
+      <div class="error" *ngIf="reservaForm.get('estudiante')?.invalid && reservaForm.get('estudiante')?.touched">
+        El estudiante es obligatorio. Debe existir en los registros.
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label>Correo Electrónico</label>
+      <input type="email" formControlName="correo" placeholder="correo@universidad.cl">
+      <div class="error" *ngIf="reservaForm.get('correo')?.invalid && reservaForm.get('correo')?.touched">
+        <span *ngIf="reservaForm.get('correo')?.errors?.['required']">El correo es obligatorio.</span>
+        <span *ngIf="reservaForm.get('correo')?.errors?.['email']">Debe ser un correo válido.</span>
+      </div>
+    </div>
+
+    <div class="form-group row">
+      <div class="col">
+        <label>Fecha</label>
+        <input type="date" formControlName="fecha">
+        <div class="error" *ngIf="reservaForm.get('fecha')?.invalid && reservaForm.get('fecha')?.touched">
+          <span *ngIf="reservaForm.get('fecha')?.errors?.['required']">La fecha es obligatoria.</span>
+          <span *ngIf="reservaForm.get('fecha')?.errors?.['fechaPasada']">No puede ser anterior al día actual.</span>
+        </div>
+      </div>
+      <div class="col">
+        <label>Horario</label>
+        <select formControlName="horario">
+          <option value="" disabled selected>Seleccione un horario</option>
+          <option *ngFor="let h of horariosDisponibles" [value]="h">{{ h }}</option>
+        </select>
+        <div class="error" *ngIf="reservaForm.get('horario')?.invalid && reservaForm.get('horario')?.touched">
+          El horario es obligatorio.
+        </div>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label>Observaciones</label>
+      <textarea formControlName="observaciones" rows="3" placeholder="Indique para qué se está reservando (mínimo 15 caracteres)"></textarea>
+      <div class="error" *ngIf="reservaForm.get('observaciones')?.invalid && reservaForm.get('observaciones')?.touched">
+        <span *ngIf="reservaForm.get('observaciones')?.errors?.['required']">Las observaciones son obligatorias.</span>
+        <span *ngIf="reservaForm.get('observaciones')?.errors?.['minlength']">Mínimo 15 caracteres.</span>
+      </div>
+    </div>
+
+    <button type="submit" class="btn-submit" [disabled]="reservaForm.invalid">Confirmar Reserva</button>
+  </form>
+</div>
