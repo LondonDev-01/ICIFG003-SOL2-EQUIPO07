@@ -20,4 +20,14 @@ public class CarreraRequestDTO {
     @NotBlank(message = "La facultad es obligatoria")
     @Size(max = 100)
     private String facultad;
+
+
+    public String getNombreCarrera() {
+    	return nombreCarrera;
+    }
+
+    public String getFacultad() {
+    	return facultad;
+    }
+
 }

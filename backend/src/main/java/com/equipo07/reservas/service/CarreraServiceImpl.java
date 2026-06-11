@@ -7,7 +7,6 @@ import com.equipo07.reservas.exception.ResourceNotFoundException;
 import com.equipo07.reservas.interfaces.CarreraService;
 import com.equipo07.reservas.mapper.CarreraMapper;
 import com.equipo07.reservas.repository.CarreraRepository;
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,11 +14,18 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-@RequiredArgsConstructor
 public class CarreraServiceImpl implements CarreraService {
 
     private final CarreraRepository carreraRepository;
     private final CarreraMapper carreraMapper;
+    
+    public CarreraServiceImpl(
+            CarreraRepository carreraRepository,
+            CarreraMapper carreraMapper) {
+
+        this.carreraRepository = carreraRepository;
+        this.carreraMapper = carreraMapper;
+    }
 
     @Override
     @Transactional(readOnly = true)
