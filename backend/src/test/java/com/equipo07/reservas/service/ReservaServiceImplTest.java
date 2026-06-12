@@ -55,7 +55,8 @@ class ReservaServiceImplTest {
 
     @Test
     void crear_conIdEstudianteInexistente_lanzaResourceNotFoundException() {
-        // Given: el DTO referencia un estudiante que no existe (con observación válida para no activar BusinessValidation primero)
+        // Given: pasamos null como idEstudianteAutenticado para forzar el uso del body,
+        // y el DTO referencia un estudiante que no existe
         ReservaRequestDTO request = new ReservaRequestDTO();
         request.setIdEstudiante(999);
         request.setIdSala(1);
@@ -68,7 +69,7 @@ class ReservaServiceImplTest {
         when(estudianteRepository.findById(999)).thenReturn(Optional.empty());
 
         // When/Then: el servicio lanza 404 indicando el id del estudiante
-        assertThatThrownBy(() -> reservaService.crear(request))
+        assertThatThrownBy(() -> reservaService.crear(request, null))
                 .isInstanceOf(ResourceNotFoundException.class)
                 .hasMessageContaining("999");
     }
@@ -86,7 +87,7 @@ class ReservaServiceImplTest {
         request.setFechaCreacion(LocalDateTime.now());
 
         // When/Then: el servicio lanza BusinessValidationException con mensaje claro
-        assertThatThrownBy(() -> reservaService.crear(request))
+        assertThatThrownBy(() -> reservaService.crear(request, 1))
                 .isInstanceOf(BusinessValidationException.class)
                 .hasMessageContaining("fecha");
     }
@@ -104,7 +105,7 @@ class ReservaServiceImplTest {
         request.setFechaCreacion(LocalDateTime.now());
 
         // When/Then: el servicio lanza BusinessValidationException con mensaje claro
-        assertThatThrownBy(() -> reservaService.crear(request))
+        assertThatThrownBy(() -> reservaService.crear(request, 1))
                 .isInstanceOf(BusinessValidationException.class)
                 .hasMessageContaining("observación");
     }
@@ -129,7 +130,7 @@ class ReservaServiceImplTest {
         when(estadoReservaRepository.findById(1)).thenReturn(Optional.of(estado));
 
         // When/Then: el servicio lanza BusinessValidationException indicando que la sala no está disponible
-        assertThatThrownBy(() -> reservaService.crear(request))
+        assertThatThrownBy(() -> reservaService.crear(request, 1))
                 .isInstanceOf(BusinessValidationException.class)
                 .hasMessageContaining("disponible");
     }
@@ -156,7 +157,7 @@ class ReservaServiceImplTest {
                 1, 1, request.getFechaReserva(), "Confirmada")).thenReturn(true);
 
         // When/Then: el servicio lanza BusinessValidationException por doble booking
-        assertThatThrownBy(() -> reservaService.crear(request))
+        assertThatThrownBy(() -> reservaService.crear(request, 1))
                 .isInstanceOf(BusinessValidationException.class)
                 .hasMessageContaining("ya está reservada");
     }
@@ -185,7 +186,7 @@ class ReservaServiceImplTest {
                 1, request.getFechaReserva(), "Confirmada")).thenReturn(true);
 
         // When/Then: el servicio lanza BusinessValidationException por reserva solapada del estudiante
-        assertThatThrownBy(() -> reservaService.crear(request))
+        assertThatThrownBy(() -> reservaService.crear(request, 1))
                 .isInstanceOf(BusinessValidationException.class)
                 .hasMessageContaining("ya tiene una reserva");
     }
@@ -236,7 +237,7 @@ class ReservaServiceImplTest {
         when(reservaMapper.toResponse(reservaPersistida)).thenReturn(responseEsperado);
 
         // When: creamos la reserva
-        ReservaResponseDTO resultado = reservaService.crear(request);
+        ReservaResponseDTO resultado = reservaService.crear(request, 1);
 
         // Then: se guarda exitosamente
         assertThat(resultado).isNotNull();
@@ -336,7 +337,7 @@ class ReservaServiceImplTest {
         when(reservaMapper.toResponse(reservaPersistida)).thenReturn(responseEsperado);
 
         // When: creamos la reserva
-        ReservaResponseDTO resultado = reservaService.crear(request);
+        ReservaResponseDTO resultado = reservaService.crear(request, 1);
 
         // Then: retorna el DTO con id autogenerado y todas las FKs resueltas
         assertThat(resultado).isNotNull();

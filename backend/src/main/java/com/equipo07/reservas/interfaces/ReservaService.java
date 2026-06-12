@@ -8,7 +8,7 @@ import java.util.List;
 public interface ReservaService {
     List<ReservaResponseDTO> listar();
     ReservaResponseDTO obtenerPorId(Integer id);
-    ReservaResponseDTO crear(ReservaRequestDTO request);
+    ReservaResponseDTO crear(ReservaRequestDTO request, Integer idEstudianteAutenticado);
     ReservaResponseDTO actualizar(Integer id, ReservaRequestDTO request);
     void eliminar(Integer id);
 }

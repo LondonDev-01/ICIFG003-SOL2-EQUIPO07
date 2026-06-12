@@ -1,5 +1,6 @@
 package com.equipo07.reservas.security;
 
+import com.equipo07.reservas.entity.Estudiante;
 import com.equipo07.reservas.repository.EstudianteRepository;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
@@ -19,6 +20,9 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import java.io.IOException;
 import java.util.Optional;
 
+/**
+ * Filtro que extrae el JWT del header Authorization y setea el Estudiante en el SecurityContext.
+ */
 @Component
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
@@ -43,14 +47,16 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         try {
             Claims claims = jwtService.parse(token);
             String rut = claims.getSubject();
-            Optional<com.equipo07.reservas.entity.Estudiante> estudianteOpt = estudianteRepository.findByRut(rut);
+            Optional<Estudiante> estudianteOpt = estudianteRepository.findByRut(rut);
             if (estudianteOpt.isPresent() && SecurityContextHolder.getContext().getAuthentication() == null) {
+                Estudiante estudiante = estudianteOpt.get();
                 UserDetails userDetails = User.withUsername(rut)
-                        .password(estudianteOpt.get().getPassword())
+                        .password(estudiante.getPassword())
                         .authorities(AuthorityUtils.NO_AUTHORITIES)
                         .build();
+                // Custom principal: el Estudiante completo, no solo el RUT
                 UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(
-                        userDetails, null, userDetails.getAuthorities());
+                        new EstudiantePrincipal(estudiante), null, userDetails.getAuthorities());
                 SecurityContextHolder.getContext().setAuthentication(auth);
             }
         } catch (JwtException ex) {
