@@ -88,4 +88,11 @@ Los archivos de salida quedarán en `frontend/dist/`.
 **Contactos y colaboradores**
 - Equipo 07
 
+**Crear base de datos**
+- Crear base de datos: test
+- Insertar los siguientes datos en la BD:
+- INSERT INTO edificio (direccion, nombre_edificio) VALUES ('Campus Central', 'Biblioteca Central');
+
+INSERT INTO sala (capacidad, codigo_sala, descripcion, estado, nombre_sala, piso, id_edificio) VALUES (6, 'A101', 'Sala de estudio grupal', 'Disponible', 'Sala A101', 1, 1), (10, 'B202', 'Sala multimedia', 'Disponible', 'Sala B202', 2, 1), (4, 'C303', 'Sala individual', 'Disponible', 'Sala C303', 3, 1), (8, 'D404', 'Sala de estudio grupal', 'Disponible', 'Sala D404', 4, 1), (8, 'E505', 'Sala de estudio grupal', 'Disponible', 'Sala E505', 5, 1), (14, 'F606', 'Sala de estudio grupal', 'Disponible', 'Sala F606', 6, 1);
+
 Si quiere que añada pasos de despliegue, Docker, o instrucciones para cambiar la DB a H2 automáticamente, dímelo y lo añado.
