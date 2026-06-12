@@ -58,11 +58,19 @@ public class ReservaServiceImpl implements ReservaService {
 
     @Override
     @Transactional
-    public ReservaResponseDTO crear(ReservaRequestDTO request) {
+    public ReservaResponseDTO crear(ReservaRequestDTO request, Integer idEstudianteAutenticado) {
         validarReglasDeNegocio(request);
 
-        Estudiante estudiante = estudianteRepository.findById(request.getIdEstudiante())
-                .orElseThrow(() -> new ResourceNotFoundException("Estudiante no encontrado con id: " + request.getIdEstudiante()));
+        // Prioridad: idEstudiante explícito (del JWT) sobre el del body
+        Integer idEstudiante = idEstudianteAutenticado != null
+                ? idEstudianteAutenticado
+                : request.getIdEstudiante();
+        if (idEstudiante == null) {
+            throw new BusinessValidationException("No se pudo determinar el estudiante autenticado");
+        }
+
+        Estudiante estudiante = estudianteRepository.findById(idEstudiante)
+                .orElseThrow(() -> new ResourceNotFoundException("Estudiante no encontrado con id: " + idEstudiante));
 
         Sala sala = salaRepository.findById(request.getIdSala())
                 .orElseThrow(() -> new ResourceNotFoundException("Sala no encontrada con id: " + request.getIdSala()));
@@ -77,10 +85,15 @@ public class ReservaServiceImpl implements ReservaService {
         validarDisponibilidadEstudiante(estudiante, request, null);
 
         Reserva reserva = reservaMapper.toEntity(request);
+        // El mapper ya setea el FK del Estudiante; nos aseguramos de reescribirlo con el del JWT
         reserva.setEstudiante(estudiante);
         reserva.setSala(sala);
         reserva.setHorario(horario);
         reserva.setEstado(estado);
+        // Asegurar que fechaCreacion esté seteada
+        if (reserva.getFechaCreacion() == null) {
+            reserva.setFechaCreacion(java.time.LocalDateTime.now());
+        }
         return reservaMapper.toResponse(reservaRepository.save(reserva));
     }
 
@@ -92,8 +105,11 @@ public class ReservaServiceImpl implements ReservaService {
         Reserva reserva = reservaRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Reserva no encontrada con id: " + id));
 
-        Estudiante estudiante = estudianteRepository.findById(request.getIdEstudiante())
-                .orElseThrow(() -> new ResourceNotFoundException("Estudiante no encontrado con id: " + request.getIdEstudiante()));
+        // Para actualizar mantenemos el estudiante de la reserva original (no se puede cambiar de estudiante)
+        Estudiante estudiante = reserva.getEstudiante();
+        if (estudiante == null) {
+            throw new ResourceNotFoundException("La reserva no tiene estudiante asociado");
+        }
 
         Sala sala = salaRepository.findById(request.getIdSala())
                 .orElseThrow(() -> new ResourceNotFoundException("Sala no encontrada con id: " + request.getIdSala()));

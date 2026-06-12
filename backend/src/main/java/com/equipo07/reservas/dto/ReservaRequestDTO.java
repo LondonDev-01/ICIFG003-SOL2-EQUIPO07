@@ -25,11 +25,10 @@ public class ReservaRequestDTO {
     @Size(max = 255)
     private String observacion;
 
-    @NotNull(message = "La fecha de creación es obligatoria")
-    @PastOrPresent
+    // Se asigna automáticamente desde el JWT en el backend si es null
     private LocalDateTime fechaCreacion;
 
-    @NotNull(message = "El id del estudiante es obligatorio")
+    // Opcional: si está presente se usa; si no, se toma del JWT
     private Integer idEstudiante;
 
     @NotNull(message = "El id de la sala es obligatorio")

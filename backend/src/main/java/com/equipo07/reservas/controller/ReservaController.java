@@ -2,13 +2,21 @@ package com.equipo07.reservas.controller;
 
 import com.equipo07.reservas.dto.ReservaRequestDTO;
 import com.equipo07.reservas.dto.ReservaResponseDTO;
+import com.equipo07.reservas.entity.Estudiante;
+import com.equipo07.reservas.exception.ResourceNotFoundException;
 import com.equipo07.reservas.interfaces.ReservaService;
+import com.equipo07.reservas.repository.EstudianteRepository;
+import com.equipo07.reservas.repository.ReservaRepository;
+import com.equipo07.reservas.security.EstudiantePrincipal;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/reservas")
@@ -16,9 +24,15 @@ import java.util.List;
 public class ReservaController {
 
     private final ReservaService reservaService;
+    private final EstudianteRepository estudianteRepository;
+    private final ReservaRepository reservaRepository;
 
-    public ReservaController(ReservaService reservaService) {
+    public ReservaController(ReservaService reservaService,
+                             EstudianteRepository estudianteRepository,
+                             ReservaRepository reservaRepository) {
         this.reservaService = reservaService;
+        this.estudianteRepository = estudianteRepository;
+        this.reservaRepository = reservaRepository;
     }
 
     @GetMapping
@@ -31,13 +45,28 @@ public class ReservaController {
         return ResponseEntity.ok(reservaService.obtenerPorId(id));
     }
 
+    @GetMapping("/mis-reservas")
+    public ResponseEntity<List<ReservaResponseDTO>> misReservas(@AuthenticationPrincipal EstudiantePrincipal principal) {
+        Estudiante estudiante = principal.estudiante();
+        List<ReservaResponseDTO> reservas = reservaRepository.findByEstudianteId(estudiante.getId())
+                .stream()
+                .map(r -> reservaService.obtenerPorId(r.getId()))
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(reservas);
+    }
+
     @PostMapping
-    public ResponseEntity<ReservaResponseDTO> crear(@Valid @RequestBody ReservaRequestDTO request) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(reservaService.crear(request));
+    public ResponseEntity<ReservaResponseDTO> crear(@Valid @RequestBody ReservaRequestDTO request,
+                                                    @AuthenticationPrincipal EstudiantePrincipal principal) {
+        // El id del estudiante SIEMPRE viene del JWT, no del body
+        Integer idEstudiante = principal != null ? principal.estudiante().getId() : null;
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(reservaService.crear(request, idEstudiante));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ReservaResponseDTO> actualizar(@PathVariable Integer id, @Valid @RequestBody ReservaRequestDTO request) {
+    public ResponseEntity<ReservaResponseDTO> actualizar(@PathVariable Integer id,
+                                                         @Valid @RequestBody ReservaRequestDTO request) {
         return ResponseEntity.ok(reservaService.actualizar(id, request));
     }
 

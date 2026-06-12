@@ -1,0 +1,33 @@
+<div class="auth-card">
+  <h2>Iniciar sesión</h2>
+  <p class="auth-sub">Ingresa tu RUT y contraseña de 4 dígitos</p>
+
+  <form [formGroup]="form" (ngSubmit)="onSubmit()">
+    <div class="form-group">
+      <label>RUT</label>
+      <input type="text" formControlName="rut" placeholder="12.345.678-9">
+      <div class="error" *ngIf="form.get('rut')?.invalid && form.get('rut')?.touched">
+        El RUT es obligatorio
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label>Contraseña</label>
+      <input type="password" formControlName="password" placeholder="****" maxlength="4">
+      <div class="error" *ngIf="form.get('password')?.invalid && form.get('password')?.touched">
+        <span *ngIf="form.get('password')?.errors?.['required']">La contraseña es obligatoria</span>
+        <span *ngIf="form.get('password')?.errors?.['pattern']">Debe ser 4 dígitos numéricos</span>
+      </div>
+    </div>
+
+    <div class="error-msg" *ngIf="error()">{{ error() }}</div>
+
+    <button type="submit" class="btn-submit" [disabled]="cargando() || form.invalid">
+      {{ cargando() ? 'Ingresando...' : 'Iniciar sesión' }}
+    </button>
+  </form>
+
+  <p class="auth-footer">
+    ¿No tienes cuenta? <a routerLink="/register">Regístrate</a>
+  </p>
+</div>

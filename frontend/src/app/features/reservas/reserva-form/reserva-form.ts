@@ -1,6 +1,8 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators, AbstractControl, ValidationErrors } from '@angular/forms';
+import { HttpClient } from '@angular/common/http';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-reserva-form',
@@ -12,71 +14,77 @@ import { ReactiveFormsModule, FormBuilder, FormGroup, Validators, AbstractContro
 export class ReservaForm implements OnInit {
   @Input() salaSeleccionada: any = null;
 
+  private readonly fb = inject(FormBuilder);
+  private readonly http = inject(HttpClient);
+  private readonly router = inject(Router);
+
   reservaForm!: FormGroup;
-  estudiantesFiltrados: any[] = [];
-  
-  // Mock data para estudiantes, en un caso real se llamaría al backend
-  estudiantesMock = [
-    { id: 1, rut: '12345678-9', nombre: 'Juan Pérez', correo: 'juan.perez@universidad.cl' },
-    { id: 2, rut: '98765432-1', nombre: 'María González', correo: 'maria.g@universidad.cl' }
-  ];
+  readonly cargando = signal(false);
+  readonly error = signal<string | null>(null);
+  readonly exito = signal(false);
 
-  horariosDisponibles = [
-    '08:00 - 09:30',
-    '09:40 - 11:10',
-    '11:20 - 12:50',
-    '14:00 - 15:30',
-    '15:40 - 17:10'
-  ];
-
-  constructor(private fb: FormBuilder) {}
+  readonly carreras = signal<any[]>([]);
+  readonly salas = signal<any[]>([]);
+  readonly horarios = signal<any[]>([]);
+  readonly estados = signal<any[]>([]);
 
   ngOnInit(): void {
     this.reservaForm = this.fb.group({
-      estudiante: ['', [Validators.required]],
-      correo: ['', [Validators.required, Validators.email]],
+      idSala: [this.salaSeleccionada?.id || '', [Validators.required]],
       fecha: ['', [Validators.required, this.fechaNoPasadaValidator]],
-      horario: ['', [Validators.required]],
+      idHorario: ['', [Validators.required]],
+      idEstado: ['', [Validators.required]],
       observaciones: ['', [Validators.required, Validators.minLength(15)]]
     });
 
-    // Filtro simulado al escribir
-    this.reservaForm.get('estudiante')?.valueChanges.subscribe(value => {
-      if (typeof value === 'string' && value.length > 2) {
-        this.estudiantesFiltrados = this.estudiantesMock.filter(e => 
-          e.nombre.toLowerCase().includes(value.toLowerCase()) || 
-          e.rut.includes(value)
-        );
-      } else {
-        this.estudiantesFiltrados = [];
-      }
-    });
+    this.cargarCatalogos();
+  }
+
+  cargarCatalogos(): void {
+    this.http.get<any[]>('http://localhost:8080/api/carreras').subscribe((d) => this.carreras.set(d));
+    this.http.get<any[]>('http://localhost:8080/api/salas').subscribe((d) => this.salas.set(d));
+    this.http.get<any[]>('http://localhost:8080/api/horarios').subscribe((d) => this.horarios.set(d));
+    this.http.get<any[]>('http://localhost:8080/api/estados-reserva').subscribe((d) => this.estados.set(d));
   }
 
   fechaNoPasadaValidator(control: AbstractControl): ValidationErrors | null {
+    if (!control.value) return null;
     const seleccionada = new Date(control.value);
     const hoy = new Date();
-    hoy.setHours(0, 0, 0, 0); // Solo comparar fecha, no hora
-    // se le suma el offset para evitar problemas de zona horaria si aplica
-    seleccionada.setMinutes(seleccionada.getMinutes() + seleccionada.getTimezoneOffset());
+    hoy.setHours(0, 0, 0, 0);
     return seleccionada < hoy ? { fechaPasada: true } : null;
   }
 
-  seleccionarEstudiante(estudiante: any) {
-    this.reservaForm.patchValue({
-      estudiante: estudiante.nombre,
-      correo: estudiante.correo
-    });
-    this.estudiantesFiltrados = [];
-  }
-
-  onSubmit() {
-    if (this.reservaForm.valid) {
-      console.log('Reserva creada:', this.reservaForm.value);
-      // Aquí se debería llamar al servicio de reserva conectándose al backend (Control superposición de horario)
-      alert("Solicitud de reserva enviada correctamente.");
-    } else {
+  onSubmit(): void {
+    if (this.reservaForm.invalid) {
       this.reservaForm.markAllAsTouched();
+      return;
     }
+    this.cargando.set(true);
+    this.error.set(null);
+    this.exito.set(false);
+
+    // El idEstudiante NO se envía: el backend lo extrae del JWT.
+    // Solo se envía la información de la reserva (sala, horario, estado, fecha, observación).
+    const body = {
+      fechaReserva: this.reservaForm.value.fecha,
+      observacion: this.reservaForm.value.observaciones,
+      idSala: Number(this.reservaForm.value.idSala),
+      idHorario: Number(this.reservaForm.value.idHorario),
+      idEstado: Number(this.reservaForm.value.idEstado)
+    };
+
+    this.http.post('http://localhost:8080/api/reservas', body).subscribe({
+      next: () => {
+        this.cargando.set(false);
+        this.exito.set(true);
+        this.reservaForm.reset();
+        setTimeout(() => this.router.navigate(['/mis-reservas']), 1500);
+      },
+      error: (err) => {
+        this.cargando.set(false);
+        this.error.set(err.error?.message || 'Error al crear la reserva');
+      }
+    });
   }
 }

@@ -1,0 +1,78 @@
+<div class="auth-card">
+  <h2>Registro de Estudiante</h2>
+  <p class="auth-sub">Crea tu cuenta para reservar salas</p>
+
+  <form [formGroup]="form" (ngSubmit)="onSubmit()">
+    <div class="form-row">
+      <div class="form-group">
+        <label>RUT</label>
+        <input type="text" formControlName="rut" placeholder="12.345.678-9">
+        <div class="error" *ngIf="form.get('rut')?.invalid && form.get('rut')?.touched">
+          El RUT es obligatorio
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Contraseña (4 dígitos)</label>
+        <input type="password" formControlName="password" placeholder="****" maxlength="4">
+        <div class="error" *ngIf="form.get('password')?.invalid && form.get('password')?.touched">
+          <span *ngIf="form.get('password')?.errors?.['required']">La contraseña es obligatoria</span>
+          <span *ngIf="form.get('password')?.errors?.['pattern']">Debe ser 4 dígitos numéricos</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-row">
+      <div class="form-group">
+        <label>Nombre</label>
+        <input type="text" formControlName="nombre">
+        <div class="error" *ngIf="form.get('nombre')?.invalid && form.get('nombre')?.touched">
+          El nombre es obligatorio
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Apellido</label>
+        <input type="text" formControlName="apellido">
+        <div class="error" *ngIf="form.get('apellido')?.invalid && form.get('apellido')?.touched">
+          El apellido es obligatorio
+        </div>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label>Correo</label>
+      <input type="email" formControlName="correo" placeholder="correo@universidad.cl">
+      <div class="error" *ngIf="form.get('correo')?.invalid && form.get('correo')?.touched">
+        <span *ngIf="form.get('correo')?.errors?.['required']">El correo es obligatorio</span>
+        <span *ngIf="form.get('correo')?.errors?.['email']">Debe ser un correo válido</span>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label>Teléfono (opcional)</label>
+      <input type="text" formControlName="telefono" placeholder="+56912345678">
+    </div>
+
+    <div class="form-group">
+      <label>Carrera</label>
+      <select formControlName="idCarrera">
+        <option value="" disabled>Seleccione una carrera</option>
+        <option *ngFor="let c of carreras()" [value]="c.id">{{ c.nombreCarrera }} - {{ c.facultad }}</option>
+      </select>
+      <div class="error" *ngIf="form.get('idCarrera')?.invalid && form.get('idCarrera')?.touched">
+        La carrera es obligatoria
+      </div>
+    </div>
+
+    <div class="error-msg" *ngIf="error()">{{ error() }}</div>
+
+    <button type="submit" class="btn-submit" [disabled]="cargando() || form.invalid">
+      {{ cargando() ? 'Registrando...' : 'Crear cuenta' }}
+    </button>
+  </form>
+
+  <p class="auth-footer">
+    ¿Ya tienes cuenta? <a routerLink="/login">Inicia sesión</a>
+  </p>
+</div>

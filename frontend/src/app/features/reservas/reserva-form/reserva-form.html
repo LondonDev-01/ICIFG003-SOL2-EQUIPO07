@@ -3,26 +3,15 @@
   <p *ngIf="salaSeleccionada">Sala seleccionada: <strong>{{ salaSeleccionada.nombreSala }}</strong></p>
 
   <form [formGroup]="reservaForm" (ngSubmit)="onSubmit()">
-    
-    <div class="form-group autocomplete">
-      <label>Estudiante (Nombre o RUT)</label>
-      <input type="text" formControlName="estudiante" placeholder="Buscar estudiante...">
-      <ul class="autocomplete-items" *ngIf="estudiantesFiltrados.length > 0">
-        <li *ngFor="let est of estudiantesFiltrados" (click)="seleccionarEstudiante(est)">
-          {{ est.nombre }} - {{ est.rut }}
-        </li>
-      </ul>
-      <div class="error" *ngIf="reservaForm.get('estudiante')?.invalid && reservaForm.get('estudiante')?.touched">
-        El estudiante es obligatorio. Debe existir en los registros.
-      </div>
-    </div>
 
     <div class="form-group">
-      <label>Correo Electrónico</label>
-      <input type="email" formControlName="correo" placeholder="correo@universidad.cl">
-      <div class="error" *ngIf="reservaForm.get('correo')?.invalid && reservaForm.get('correo')?.touched">
-        <span *ngIf="reservaForm.get('correo')?.errors?.['required']">El correo es obligatorio.</span>
-        <span *ngIf="reservaForm.get('correo')?.errors?.['email']">Debe ser un correo válido.</span>
+      <label>Sala</label>
+      <select formControlName="idSala">
+        <option value="" disabled>Seleccione una sala</option>
+        <option *ngFor="let s of salas()" [value]="s.id">{{ s.nombreSala }} - Piso {{ s.piso }} (Cap: {{ s.capacidad }})</option>
+      </select>
+      <div class="error" *ngIf="reservaForm.get('idSala')?.invalid && reservaForm.get('idSala')?.touched">
+        La sala es obligatoria
       </div>
     </div>
 
@@ -37,14 +26,24 @@
       </div>
       <div class="col">
         <label>Horario</label>
-        <select formControlName="horario">
-          <option value="" disabled selected>Seleccione un horario</option>
-          <option *ngFor="let h of horariosDisponibles" [value]="h">{{ h }}</option>
+        <select formControlName="idHorario">
+          <option value="" disabled>Seleccione un horario</option>
+          <option *ngFor="let h of horarios()" [value]="h.id">
+            {{ h.horaInicio }} - {{ h.horaTermino }}
+          </option>
         </select>
-        <div class="error" *ngIf="reservaForm.get('horario')?.invalid && reservaForm.get('horario')?.touched">
-          El horario es obligatorio.
+        <div class="error" *ngIf="reservaForm.get('idHorario')?.invalid && reservaForm.get('idHorario')?.touched">
+          El horario es obligatorio
         </div>
       </div>
+    </div>
+
+    <div class="form-group">
+      <label>Estado de la reserva</label>
+      <select formControlName="idEstado">
+        <option value="" disabled>Seleccione un estado</option>
+        <option *ngFor="let e of estados()" [value]="e.idEstado">{{ e.nombreEstado }}</option>
+      </select>
     </div>
 
     <div class="form-group">
@@ -56,6 +55,15 @@
       </div>
     </div>
 
-    <button type="submit" class="btn-submit" [disabled]="reservaForm.invalid">Confirmar Reserva</button>
+    <p class="info-jwt">
+      <i>Tu identidad se obtendrá automáticamente del token de sesión. No es necesario identificarse manualmente.</i>
+    </p>
+
+    <div class="success-msg" *ngIf="exito()">¡Reserva creada con éxito! Redirigiendo a tus reservas...</div>
+    <div class="error-msg" *ngIf="error()">{{ error() }}</div>
+
+    <button type="submit" class="btn-submit" [disabled]="cargando() || reservaForm.invalid">
+      {{ cargando() ? 'Enviando...' : 'Confirmar Reserva' }}
+    </button>
   </form>
 </div>

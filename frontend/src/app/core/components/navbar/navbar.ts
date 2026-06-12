@@ -1,6 +1,8 @@
-import { RouterLink, RouterLinkActive } from '@angular/router';
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
+import { RouterLink, RouterLinkActive, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
+
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-navbar',
@@ -9,4 +11,14 @@ import { CommonModule } from '@angular/common';
   templateUrl: './navbar.html',
   styleUrl: './navbar.css',
 })
-export class NavbarComponent {}
+export class NavbarComponent {
+  private readonly auth = inject(AuthService);
+  private readonly router = inject(Router);
+
+  readonly isAuthenticated = this.auth.isAuthenticated;
+  readonly currentUser = this.auth.currentUser;
+
+  logout(): void {
+    this.auth.logout();
+  }
+}
