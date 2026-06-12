@@ -1,0 +1,59 @@
+<div class="ayuda-container">
+  <div class="ayuda-content">
+    <h1>Centro de Ayuda</h1>
+    <p class="ayuda-intro">Aquí encontrarás respuestas a las preguntas más frecuentes sobre nuestro sistema de reservas.</p>
+
+    <!-- Pasos para reservar -->
+    <section class="pasos-section">
+      <h2>Pasos para Reservar una Sala</h2>
+      <div class="pasos-grid">
+        <div *ngFor="let paso of pasos" class="paso-card">
+          <div class="paso-numero">{{ paso.numero }}</div>
+          <h3>{{ paso.titulo }}</h3>
+          <p>{{ paso.descripcion }}</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Preguntas Frecuentes -->
+    <section class="faq-section">
+      <h2>Preguntas Frecuentes</h2>
+      <div class="faq-list">
+        <div 
+          *ngFor="let faq of faqs; let i = index" 
+          class="faq-item"
+          [class.abierto]="faq.abierto">
+          <div class="faq-pregunta" (click)="toggleFaq(i)">
+            <h3>{{ faq.pregunta }}</h3>
+            <i class="bi" [ngClass]="faq.abierto ? 'bi-chevron-up' : 'bi-chevron-down'"></i>
+          </div>
+          <div class="faq-respuesta" *ngIf="faq.abierto">
+            <p>{{ faq.respuesta }}</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Información adicional -->
+    <section class="info-section">
+      <h2>¿Necesitas Más Ayuda?</h2>
+      <div class="info-cards">
+        <div class="info-card">
+          <i class="bi bi-chat-dots"></i>
+          <h3>Chat en Vivo</h3>
+          <p>Habla con nuestro equipo de soporte en tiempo real. Disponible de 9:00 a 17:00.</p>
+        </div>
+        <div class="info-card">
+          <i class="bi bi-envelope"></i>
+          <h3>Enviar Email</h3>
+          <p>Contáctanos a través de soporte@biblioteca.edu. Responderemos en 24 horas.</p>
+        </div>
+        <div class="info-card">
+          <i class="bi bi-telephone"></i>
+          <h3>Llamar</h3>
+          <p>Llámanos al +34 123 456 789 de lunes a viernes, de 9:00 a 17:00.</p>
+        </div>
+      </div>
+    </section>
+  </div>
+</div>
