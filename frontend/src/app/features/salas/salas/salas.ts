@@ -1,7 +1,4 @@
 import { Component, OnInit, AfterViewChecked } from '@angular/core';
-
-import { NavbarComponent } from '../../../core/components/navbar/navbar';
-import { FooterComponent } from '../../../core/components/footer/footer';
 import { SalaCard } from '../../../shared/components/sala-card/sala-card';
 import { CommonModule } from '@angular/common';
 import { SalaService } from './services/sala.service';
@@ -16,8 +13,6 @@ import { FormsModule } from '@angular/forms';
   imports: [
     CommonModule,
     FormsModule,
-    NavbarComponent,
-    FooterComponent,
     SalaCard
   ],
   templateUrl: './salas.html',

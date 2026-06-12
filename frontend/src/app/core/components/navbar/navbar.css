@@ -1,20 +1,11 @@
 .navbar {
-  background: linear-gradient(
-  90deg,
-  #00204b,
-  #012b5e
-);
-
+  background: linear-gradient(90deg, #00204b, #012b5e);
   display: flex;
   justify-content: space-between;
   align-items: center;
-
-  padding: 6px 50px;
-
+  padding: 10px 50px;
   color: white;
-
-  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
-
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
   position: sticky;
   top: 0;
   z-index: 1000;
@@ -27,11 +18,10 @@
 }
 
 .logo-img {
-  height: 64px;
+  height: 55px;
   width: auto;
   object-fit: contain;
 }
-
 
 .logo-icon {
   font-size: 2rem;
@@ -55,32 +45,67 @@
 
 .nav-links {
   display: flex;
-  gap: 30px;
+  gap: 35px;
   list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.nav-links li {
+  position: relative;
 }
 
 .nav-links a {
   color: white;
   text-decoration: none;
   font-weight: 500;
-
-  transition: 0.3s;
+  font-size: 15px;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  padding: 8px 0;
 }
 
 .nav-links a:hover {
-  opacity: 0.8;
+  color: #87ceeb;
+  text-shadow: 0 0 10px rgba(135, 206, 235, 0.5);
+}
+
+.nav-links a.active-link {
+  color: #87ceeb;
+  border-bottom: 3px solid #87ceeb;
+  padding-bottom: 5px;
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+  .navbar {
+    padding: 10px 30px;
+  }
+
+  .nav-links {
+    gap: 25px;
+  }
+
+  .nav-links a {
+    font-size: 14px;
+  }
 }
 
 @media (max-width: 768px) {
-
   .navbar {
     flex-direction: column;
     gap: 15px;
     padding: 15px;
   }
 
+  .logo-container {
+    width: 100%;
+    justify-content: center;
+  }
+
   .logo-img {
-    height: 55px;
+    height: 50px;
   }
 
   .nav-links {
@@ -91,8 +116,39 @@
     width: 100%;
   }
 
-  .nav-links a {
-    font-size: 14px;
+  .nav-links li {
+    flex: 1;
+    min-width: 80px;
+    text-align: center;
   }
 
+  .nav-links a {
+    font-size: 13px;
+    justify-content: center;
+  }
+
+  .nav-links a.active-link {
+    border-bottom-width: 2px;
+    padding-bottom: 3px;
+  }
+}
+
+@media (max-width: 480px) {
+  .navbar {
+    padding: 10px;
+  }
+
+  .logo-img {
+    height: 45px;
+  }
+
+  .nav-links {
+    gap: 10px;
+    font-size: 12px;
+  }
+
+  .nav-links a {
+    font-size: 12px;
+    padding: 6px 0;
+  }
 }

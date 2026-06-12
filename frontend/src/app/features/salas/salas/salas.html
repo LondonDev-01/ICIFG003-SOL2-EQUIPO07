@@ -1,104 +1,75 @@
-<app-navbar></app-navbar>
+<div class="salas-wrapper">
+  <section class="salas-container">
+    <h1>Salas de Estudio</h1>
+    <p>Encuentra y reserva la sala que mejor se adapte a tus necesidades.</p>
 
-<main>
+    <div class="barra-superior">
+      <div class="busqueda-card">
+        <div class="buscar">
+          <label for="buscarSala">Buscar sala</label>
+          <input
+            id="buscarSala"
+            type="text"
+            placeholder="Ej: Sala A101"
+            [(ngModel)]="textoBusqueda"
+            (input)="filtrarSalas()">
+        </div>
+      </div>
 
-<section class="salas-container">
+      <div class="filtros-card">
+        <div class="filtros">
+          <div class="titulo-filtros">
+            <h3>Filtros</h3>
+          </div>
 
-  <h1>Salas de Estudio</h1>
+          <div class="categoria">
+            <label for="categoriaSala">Capacidad</label>
+            <select
+              id="categoriaSala"
+              [(ngModel)]="capacidadSeleccionada">
+              <option value="">Todas</option>
+              <option value="4">Hasta 4 personas</option>
+              <option value="8">Hasta 8 personas</option>
+              <option value="9">Más de 8 personas</option>
+            </select>
+          </div>
 
-  <p>
-    Encuentra y reserva la sala que mejor se adapte a tus necesidades.
-  </p>
+          <div class="fecha">
+            <label for="fechaSala">Fecha (día de consulta)</label>
+            <input
+              type="date"
+              id="fechaSala"
+              [(ngModel)]="fechaSeleccionada">
+          </div>
 
-  <div class="barra-superior">
+          <div class="ordenar">
+            <label for="ordenarSala">Ordenar por</label>
+            <select
+              id="ordenarSala"
+              [(ngModel)]="ordenSeleccionado">
+              <option value="nombre">Nombre (A-Z)</option>
+              <option value="capacidad">Capacidad</option>
+            </select>
+          </div>
 
-  <div class="busqueda-card">
-    
-    <div class="buscar">
-      <label for="buscarSala">Buscar sala</label>
-
-        <input
-          id="buscarSala"
-          type="text"
-          placeholder="Ej: Sala A101"
-          [(ngModel)]="textoBusqueda"
-          (input)="filtrarSalas()">
+          <div class="btn-buscar">
+            <button (click)="filtrarSalas()">
+              <i class="bi bi-search"></i> Buscar
+            </button>
+          </div>
+        </div>
+      </div>
     </div>
 
+    <div class="salas-grid">
+      <app-sala-card
+        *ngFor="let sala of salasFiltradas"
+        [nombre]="sala.nombreSala"
+        [capacidad]="sala.capacidad"
+        [ubicacion]="'Piso ' + sala.piso"
+        horario="08:00 - 22:00 hrs"
+        [imagen]="obtenerImagen(sala.codigoSala)">
+      </app-sala-card>
     </div>
-
-    <div class="filtros-card">
-
-       <div class="filtros">
-
-    <div class="titulo-filtros">
-      <h3>Filtros</h3>
-    </div>
-
-    <div class="categoria">
-      <label for="categoriaSala">Capacidad</label>
-
-        <select
-          id="categoriaSala"
-          [(ngModel)]="capacidadSeleccionada">
-
-            <option value="">Todas</option>
-            <option value="4">Hasta 4 personas</option>
-            <option value="8">Hasta 8 personas</option>
-            <option value="9">Más de 8 personas</option>
-
-        </select>
-    </div>
-
-    <div class="fecha">
-
-      <label for="fechaSala">Fecha (día de consulta)</label>
-
-      <input
-        type="date"
-        id="fechaSala"
-        [(ngModel)]="fechaSeleccionada">
-
-    </div>
-
-    <div class="ordenar">
-        <label for="ordenarSala">Ordenar por</label>
-
-        <select
-          id="ordenarSala"
-          [(ngModel)]="ordenSeleccionado">
-
-            <option value="nombre">Nombre (A-Z)</option>
-            <option value="capacidad">Capacidad</option>
-
-        </select>
-    </div>
-
-    <div class="btn-buscar">
-      <button (click)="filtrarSalas()">
-        Buscar
-      </button>
-    </div>
-
-    </div>
+  </section>
 </div>
-</div>
-
-<div class="salas-grid">
-
-  <app-sala-card
-    *ngFor="let sala of salasFiltradas"
-    [nombre]="sala.nombreSala"
-    [capacidad]="sala.capacidad"
-    [ubicacion]="'Piso ' + sala.piso"
-    horario="08:00 - 22:00 hrs"
-    [imagen]="obtenerImagen(sala.codigoSala)">
-  </app-sala-card>
-
-</div>
-
-</section>
-
-</main>
-
-<app-footer></app-footer>
