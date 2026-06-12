@@ -7,6 +7,7 @@ import com.equipo07.reservas.entity.EstadoReserva;
 import com.equipo07.reservas.entity.HorarioDisponible;
 import com.equipo07.reservas.entity.Reserva;
 import com.equipo07.reservas.entity.Sala;
+import com.equipo07.reservas.exception.BusinessValidationException;
 import com.equipo07.reservas.exception.ResourceNotFoundException;
 import com.equipo07.reservas.mapper.ReservaMapper;
 import com.equipo07.reservas.repository.EstudianteRepository;
@@ -54,14 +55,14 @@ class ReservaServiceImplTest {
 
     @Test
     void crear_conIdEstudianteInexistente_lanzaResourceNotFoundException() {
-        // Given: el DTO referencia un estudiante que no existe
+        // Given: el DTO referencia un estudiante que no existe (con observación válida para no activar BusinessValidation primero)
         ReservaRequestDTO request = new ReservaRequestDTO();
         request.setIdEstudiante(999);
         request.setIdSala(1);
         request.setIdHorario(1);
         request.setIdEstado(1);
         request.setFechaReserva(LocalDate.now());
-        request.setObservacion("Test");
+        request.setObservacion("Observación válida de más de quince caracteres");
         request.setFechaCreacion(LocalDateTime.now());
 
         when(estudianteRepository.findById(999)).thenReturn(Optional.empty());
@@ -70,6 +71,60 @@ class ReservaServiceImplTest {
         assertThatThrownBy(() -> reservaService.crear(request))
                 .isInstanceOf(ResourceNotFoundException.class)
                 .hasMessageContaining("999");
+    }
+
+    @Test
+    void crear_conFechaPasada_lanzaBusinessValidationException() {
+        // Given: una fecha de reserva anterior a hoy
+        ReservaRequestDTO request = new ReservaRequestDTO();
+        request.setIdEstudiante(1);
+        request.setIdSala(1);
+        request.setIdHorario(1);
+        request.setIdEstado(1);
+        request.setFechaReserva(LocalDate.now().minusDays(1));
+        request.setObservacion("Observación válida de más de quince caracteres");
+        request.setFechaCreacion(LocalDateTime.now());
+
+        // When/Then: el servicio lanza BusinessValidationException con mensaje claro
+        assertThatThrownBy(() -> reservaService.crear(request))
+                .isInstanceOf(BusinessValidationException.class)
+                .hasMessageContaining("fecha");
+    }
+
+    @Test
+    void crear_conObservacionCorta_lanzaBusinessValidationException() {
+        // Given: una observación de menos de 15 caracteres
+        ReservaRequestDTO request = new ReservaRequestDTO();
+        request.setIdEstudiante(1);
+        request.setIdSala(1);
+        request.setIdHorario(1);
+        request.setIdEstado(1);
+        request.setFechaReserva(LocalDate.now().plusDays(1));
+        request.setObservacion("Corta");
+        request.setFechaCreacion(LocalDateTime.now());
+
+        // When/Then: el servicio lanza BusinessValidationException con mensaje claro
+        assertThatThrownBy(() -> reservaService.crear(request))
+                .isInstanceOf(BusinessValidationException.class)
+                .hasMessageContaining("observación");
+    }
+
+    @Test
+    void actualizar_conObservacionCorta_lanzaBusinessValidationException() {
+        // Given: DTO con observación corta. La validación corre antes que findById, así que no stub de la reserva.
+        ReservaRequestDTO request = new ReservaRequestDTO();
+        request.setIdEstudiante(1);
+        request.setIdSala(1);
+        request.setIdHorario(1);
+        request.setIdEstado(1);
+        request.setFechaReserva(LocalDate.now().plusDays(2));
+        request.setObservacion("Corta");
+        request.setFechaCreacion(LocalDateTime.now());
+
+        // When/Then: actualizar también valida reglas de negocio
+        assertThatThrownBy(() -> reservaService.actualizar(50, request))
+                .isInstanceOf(BusinessValidationException.class)
+                .hasMessageContaining("observación");
     }
 
     @Test

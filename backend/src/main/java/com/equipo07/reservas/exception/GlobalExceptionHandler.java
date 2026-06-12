@@ -24,6 +24,16 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(body);
     }
 
+    @ExceptionHandler(BusinessValidationException.class)
+    public ResponseEntity<Map<String, Object>> handleBusinessValidation(BusinessValidationException ex) {
+        Map<String, Object> body = new HashMap<>();
+        body.put("timestamp", LocalDateTime.now());
+        body.put("status", HttpStatus.BAD_REQUEST.value());
+        body.put("error", "Business Validation Failed");
+        body.put("message", ex.getMessage());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(body);
+    }
+
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<Map<String, Object>> handleValidation(MethodArgumentNotValidException ex) {
         Map<String, String> errors = new HashMap<>();

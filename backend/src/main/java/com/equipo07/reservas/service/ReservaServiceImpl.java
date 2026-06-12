@@ -7,6 +7,7 @@ import com.equipo07.reservas.entity.EstadoReserva;
 import com.equipo07.reservas.entity.HorarioDisponible;
 import com.equipo07.reservas.entity.Reserva;
 import com.equipo07.reservas.entity.Sala;
+import com.equipo07.reservas.exception.BusinessValidationException;
 import com.equipo07.reservas.exception.ResourceNotFoundException;
 import com.equipo07.reservas.interfaces.ReservaService;
 import com.equipo07.reservas.mapper.ReservaMapper;
@@ -19,12 +20,15 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class ReservaServiceImpl implements ReservaService {
+
+    private static final int OBSERVACION_MIN_LENGTH = 15;
 
     private final ReservaRepository reservaRepository;
     private final EstudianteRepository estudianteRepository;
@@ -52,6 +56,8 @@ public class ReservaServiceImpl implements ReservaService {
     @Override
     @Transactional
     public ReservaResponseDTO crear(ReservaRequestDTO request) {
+        validarReglasDeNegocio(request);
+
         Estudiante estudiante = estudianteRepository.findById(request.getIdEstudiante())
                 .orElseThrow(() -> new ResourceNotFoundException("Estudiante no encontrado con id: " + request.getIdEstudiante()));
 
@@ -75,6 +81,8 @@ public class ReservaServiceImpl implements ReservaService {
     @Override
     @Transactional
     public ReservaResponseDTO actualizar(Integer id, ReservaRequestDTO request) {
+        validarReglasDeNegocio(request);
+
         Reserva reserva = reservaRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Reserva no encontrada con id: " + id));
 
@@ -107,5 +115,14 @@ public class ReservaServiceImpl implements ReservaService {
             throw new ResourceNotFoundException("Reserva no encontrada con id: " + id);
         }
         reservaRepository.deleteById(id);
+    }
+
+    private void validarReglasDeNegocio(ReservaRequestDTO request) {
+        if (request.getFechaReserva() != null && request.getFechaReserva().isBefore(LocalDate.now())) {
+            throw new BusinessValidationException("La fecha de reserva no puede ser anterior al día actual");
+        }
+        if (request.getObservacion() != null && request.getObservacion().trim().length() < OBSERVACION_MIN_LENGTH) {
+            throw new BusinessValidationException("La observación debe tener al menos " + OBSERVACION_MIN_LENGTH + " caracteres");
+        }
     }
 }
