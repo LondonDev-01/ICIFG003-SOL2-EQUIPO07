@@ -4,7 +4,15 @@
   </div>
 
   <ul class="nav-links">
-    <li><a routerLink="" routerLinkActive="active-link" [routerLinkActiveOptions]="{exact: true}">Inicio</a></li>
+    <li>
+      <a
+        routerLink="/"
+        routerLinkActive="active-link"
+        [routerLinkActiveOptions]="{ exact: true }">
+        Inicio
+      </a>
+    </li>
+
     <li><a routerLink="/salas" routerLinkActive="active-link">Salas</a></li>
     <li *ngIf="isAuthenticated()"><a routerLink="/mis-reservas" routerLinkActive="active-link">Mis reservas</a></li>
     <li><a routerLink="/ayuda" routerLinkActive="active-link">Ayuda</a></li>

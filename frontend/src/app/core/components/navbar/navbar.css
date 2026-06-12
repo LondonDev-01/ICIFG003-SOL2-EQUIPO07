@@ -67,13 +67,13 @@
 }
 
 .nav-links a:hover {
-  color: #87ceeb;
+  color: #ffffff;
   text-shadow: 0 0 10px rgba(135, 206, 235, 0.5);
 }
 
 .nav-links a.active-link {
-  color: #87ceeb;
-  border-bottom: 3px solid #87ceeb;
+  color: #ffffff;
+  border-bottom: 3px solid #ffffff;
   padding-bottom: 5px;
 }
 
