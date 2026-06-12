@@ -5,7 +5,7 @@ import { SalaService } from './services/sala.service';
 import { Sala } from './models/sala.model';
 import { ChangeDetectorRef } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-salas',
@@ -30,7 +30,8 @@ export class Salas implements OnInit {
 
   constructor(
     private salaService: SalaService,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    private router: Router
   ) {
     
   }
@@ -97,7 +98,10 @@ export class Salas implements OnInit {
       );
 
     }
+  }
 
+  irAReservar(salaId: number): void {
+    this.router.navigate(['/reservar'], { queryParams: { salaId } });
   }
 
   obtenerImagen(codigoSala: string): string {

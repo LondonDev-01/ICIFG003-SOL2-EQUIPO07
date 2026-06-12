@@ -32,6 +32,9 @@
       <p class="observacion">{{ r.observacion }}</p>
       <div class="reserva-footer">
         <small>Creada: {{ r.fechaCreacion | date:'dd/MM/yyyy HH:mm' }}</small>
+        <button [routerLink]="['/editar-reserva', r.id]" class="btn-editar" *ngIf="r.nombreEstado !== 'Cancelada'">
+          Editar
+        </button>
         <button (click)="cancelarReserva(r.id)" class="btn-cancelar" *ngIf="r.nombreEstado !== 'Cancelada'">
           Cancelar
         </button>

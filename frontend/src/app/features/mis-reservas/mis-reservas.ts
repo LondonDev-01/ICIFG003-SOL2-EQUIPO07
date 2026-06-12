@@ -24,7 +24,7 @@ export class MisReservas implements OnInit {
   readonly error = signal<string | null>(null);
 
   ngOnInit(): void {
-    this.http.get<Reserva[]>('http://localhost:8080/api/mis-reservas').subscribe({
+    this.http.get<Reserva[]>('http://localhost:8080/api/reservas/mis-reservas').subscribe({
       next: (data) => {
         this.reservas.set(data);
         this.cargando.set(false);

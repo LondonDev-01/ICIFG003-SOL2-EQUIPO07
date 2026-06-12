@@ -7,6 +7,7 @@ import { Ayuda } from './features/ayuda/ayuda';
 import { Login } from './features/auth/login/login';
 import { Register } from './features/auth/register/register';
 import { MisReservas } from './features/mis-reservas/mis-reservas';
+import { ReservaForm } from './features/reservas/reserva-form/reserva-form';
 import { authGuard } from './core/guards/auth.guard';
 
 export const routes: Routes = [
@@ -37,6 +38,16 @@ export const routes: Routes = [
   {
     path: 'mis-reservas',
     component: MisReservas,
+    canActivate: [authGuard]
+  },
+  {
+    path: 'reservar',
+    component: ReservaForm,
+    canActivate: [authGuard]
+  },
+  {
+    path: 'editar-reserva/:id',
+    component: ReservaForm,
     canActivate: [authGuard]
   }
 ];

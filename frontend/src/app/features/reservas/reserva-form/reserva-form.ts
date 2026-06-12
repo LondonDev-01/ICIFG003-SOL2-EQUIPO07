@@ -1,8 +1,8 @@
-import { Component, Input, OnInit, inject, signal } from '@angular/core';
+import { Component, OnInit, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators, AbstractControl, ValidationErrors } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-reserva-form',
@@ -12,11 +12,10 @@ import { Router } from '@angular/router';
   styleUrls: ['./reserva-form.css']
 })
 export class ReservaForm implements OnInit {
-  @Input() salaSeleccionada: any = null;
-
   private readonly fb = inject(FormBuilder);
   private readonly http = inject(HttpClient);
   private readonly router = inject(Router);
+  private readonly route = inject(ActivatedRoute);
 
   reservaForm!: FormGroup;
   readonly cargando = signal(false);
@@ -28,9 +27,21 @@ export class ReservaForm implements OnInit {
   readonly horarios = signal<any[]>([]);
   readonly estados = signal<any[]>([]);
 
+  isEditMode = false;
+  reservaId: number | null = null;
+  salaSeleccionada: any = null;
+
   ngOnInit(): void {
+    const salaIdParam = this.route.snapshot.queryParamMap.get('salaId');
+    const idParam = this.route.snapshot.paramMap.get('id');
+
+    if (idParam) {
+      this.isEditMode = true;
+      this.reservaId = Number(idParam);
+    }
+
     this.reservaForm = this.fb.group({
-      idSala: [this.salaSeleccionada?.id || '', [Validators.required]],
+      idSala: [salaIdParam || '', [Validators.required]],
       fecha: ['', [Validators.required, this.fechaNoPasadaValidator]],
       idHorario: ['', [Validators.required]],
       idEstado: ['', [Validators.required]],
@@ -38,6 +49,27 @@ export class ReservaForm implements OnInit {
     });
 
     this.cargarCatalogos();
+
+    if (this.isEditMode) {
+      this.cargarReserva();
+    }
+  }
+
+  cargarReserva(): void {
+    if (!this.reservaId) return;
+    this.http.get<any>(`http://localhost:8080/api/reservas/${this.reservaId}`).subscribe({
+      next: (reserva) => {
+        const idS = this.salas().find(s => s.nombreSala === reserva.nombreSala)?.id || reserva.idSala;
+        this.reservaForm.patchValue({
+          idSala: idS || '',
+          fecha: reserva.fechaReserva?.split('T')[0] || reserva.fechaReserva,
+          idHorario: reserva.idHorario || '',
+          idEstado: reserva.idEstado || '',
+          observaciones: reserva.observacion
+        });
+      },
+      error: () => this.error.set('Error al cargar la reserva a editar')
+    });
   }
 
   cargarCatalogos(): void {
@@ -74,17 +106,31 @@ export class ReservaForm implements OnInit {
       idEstado: Number(this.reservaForm.value.idEstado)
     };
 
-    this.http.post('http://localhost:8080/api/reservas', body).subscribe({
-      next: () => {
-        this.cargando.set(false);
-        this.exito.set(true);
-        this.reservaForm.reset();
-        setTimeout(() => this.router.navigate(['/mis-reservas']), 1500);
-      },
-      error: (err) => {
-        this.cargando.set(false);
-        this.error.set(err.error?.message || 'Error al crear la reserva');
-      }
-    });
+    if (this.isEditMode && this.reservaId) {
+      this.http.put(`http://localhost:8080/api/reservas/${this.reservaId}`, body).subscribe({
+        next: () => {
+          this.cargando.set(false);
+          this.exito.set(true);
+          setTimeout(() => this.router.navigate(['/mis-reservas']), 1500);
+        },
+        error: (err) => {
+          this.cargando.set(false);
+          this.error.set(err.error?.message || 'Error al editar la reserva');
+        }
+      });
+    } else {
+      this.http.post('http://localhost:8080/api/reservas', body).subscribe({
+        next: () => {
+          this.cargando.set(false);
+          this.exito.set(true);
+          this.reservaForm.reset();
+          setTimeout(() => this.router.navigate(['/mis-reservas']), 1500);
+        },
+        error: (err) => {
+          this.cargando.set(false);
+          this.error.set(err.error?.message || 'Error al crear la reserva');
+        }
+      });
+    }
   }
 }
