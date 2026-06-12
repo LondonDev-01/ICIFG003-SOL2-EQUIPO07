@@ -1,0 +1,41 @@
+<section class="mis-reservas-container">
+  <header class="page-header">
+    <div>
+      <h1>Mis Reservas</h1>
+      <p *ngIf="currentUser()">Bienvenido, <strong>{{ currentUser()?.nombre }}</strong></p>
+    </div>
+    <div class="header-actions">
+      <a routerLink="/salas" class="btn-primary">Nueva reserva</a>
+      <button (click)="logout()" class="btn-logout">Cerrar sesión</button>
+    </div>
+  </header>
+
+  <div *ngIf="cargando()" class="loading">Cargando tus reservas...</div>
+
+  <div *ngIf="error()" class="error-msg">{{ error() }}</div>
+
+  <div *ngIf="!cargando() && !error() && reservas().length === 0" class="empty">
+    <p>Aún no tienes reservas.</p>
+    <a routerLink="/salas" class="btn-primary">Ver salas disponibles</a>
+  </div>
+
+  <div *ngIf="reservas().length > 0" class="reservas-grid">
+    <div *ngFor="let r of reservas()" class="reserva-card">
+      <div class="reserva-header">
+        <span class="estado-badge" [class.estado-confirmada]="r.nombreEstado === 'Confirmada'"
+              [class.estado-cancelada]="r.nombreEstado === 'Cancelada'">
+          {{ r.nombreEstado }}
+        </span>
+        <span class="fecha">{{ r.fechaReserva | date:'dd/MM/yyyy' }}</span>
+      </div>
+      <h3>{{ r.nombreSala }}</h3>
+      <p class="observacion">{{ r.observacion }}</p>
+      <div class="reserva-footer">
+        <small>Creada: {{ r.fechaCreacion | date:'dd/MM/yyyy HH:mm' }}</small>
+        <button (click)="cancelarReserva(r.id)" class="btn-cancelar" *ngIf="r.nombreEstado !== 'Cancelada'">
+          Cancelar
+        </button>
+      </div>
+    </div>
+  </div>
+</section>
