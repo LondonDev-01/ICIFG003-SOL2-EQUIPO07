@@ -31,11 +31,6 @@ public class EstudianteController {
         return ResponseEntity.ok(estudianteService.obtenerPorId(id));
     }
 
-    @PostMapping
-    public ResponseEntity<EstudianteResponseDTO> crear(@Valid @RequestBody EstudianteRequestDTO request) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(estudianteService.crear(request));
-    }
-
     @PutMapping("/{id}")
     public ResponseEntity<EstudianteResponseDTO> actualizar(@PathVariable Integer id, @Valid @RequestBody EstudianteRequestDTO request) {
         return ResponseEntity.ok(estudianteService.actualizar(id, request));

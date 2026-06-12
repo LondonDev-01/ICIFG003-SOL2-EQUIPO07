@@ -137,63 +137,18 @@
 | SALA | 1 → N | RESERVA | id_sala |
 | HORARIO_DISPONIBLE | 1 → N | RESERVA | id_horario |
 | ESTADO_RESERVA | 1 → N | RESERVA | id_estado |
-┌──────────────┐                      ┌──────────────┐
-│   CARRERA    │                      │   EDIFICIO   │
-│──────────────│                      │──────────────│
-│ id (PK)      │                      │ id (PK)      │
-│ nombre_carrera│                     │ nombre_edif. │
-│ facultad     │                      │ direccion    │
-└──────┬───────┘                      └──────┬───────┘
-       │ 1                                    │ 1
-       │                                      │
-       │ N                                    │ N
-       │                                      │
-┌──────▼───────┐                      ┌──────▼───────┐
-│  ESTUDIANTE  │                      │     SALA     │
-│──────────────│                      │──────────────│
-│ id (PK)      │                      │ id (PK)      │
-│ rut (U)      │                      │ codigo_sala(U)│
-│ nombre       │                      │ nombre_sala  │
-│ apellido     │                      │ capacidad    │
-│ correo (U)   │                      │ piso         │
-│ telefono     │                      │ descripcion  │
-│ fecha_reg.   │                      │ estado       │
-│ id_carrera FK│                      │ id_edif. FK  │
-└──────┬───────┘                      └──────┬───────┘
-       │ 1                                    │ 1
-       │                                      │
-       │                                      │ 1
-       │ N                                    │
-       │      ┌─────────────────────┐   N     │
-       │      │      RESERVA        │◄────────┘
-       └─────►│─────────────────────│◄────────────┐
-              │ id (PK)             │             │
-              │ fecha_reserva       │             │
-              │ observacion         │             │
-              │ fecha_creacion      │             │
-              │ id_estudiante   (FK)│             │
-              │ id_sala         (FK)│             │
-              │ id_horario      (FK)│             │
-              │ id_estado       (FK)│             │
-              └──────┬──────┬───────┘             │
-                     │ N    │ N                   │ N
-                     │      │                     │
-              ┌──────▼──┐ ┌─▼──────────┐   ┌──────▼────────┐
-              │HORARIO │ │ ESTADO_RES. │   │   SALA (ya    │
-              │DISP.   │ │─────────────│   │   referenciada│
-              │─────────│ │ id_estado PK│   │   arriba)     │
-              │id PK   │ │ nombre_est. │   │               │
-              │h_inicio│ └─────────────┘   │               │
-              │h_termin│                   │               │
-              │id_sala │                   │               │
-              │   FK   │                   │               │
-              └────────┘                   │               │
-                          ┌───────────────┘               │
-                          │                               │
-                          └───────────────────────────────┘
-                          (SALA es la misma entidad
-                           referenciada desde RESERVA)
-```
+
+---
+
+## Guion de Presentacion (1 slide)
+
+> *"Este es el modelo MER de nuestro sistema de reservas. Son **7 entidades** conectadas por **7 relaciones, todas 1 a N** — no hay N a M ni 1 a 1.*
+>
+> *Las dos entidades raíz son **Carrera** y **Edificio**: no dependen de nadie. De Carrera salen los Estudiantes; de Edificio salen las Salas. De cada Sala cuelgan los Horarios Disponibles.*
+>
+> *Toda la lógica del sistema vive en **Reserva**, que es la entidad nexo: tiene **cuatro llaves foráneas** — apunta al Estudiante que reserva, a la Sala que se reserva, al Horario que ocupa, y al Estado de la reserva.*
+>
+> *La regla que se repite en todo el modelo es simple: **la FK siempre va del lado de N**, y en JPA eso se traduce a que el `@JoinColumn` está en la entidad hija, mientras que el padre lleva el `@OneToMany` con `mappedBy`."*
 
 ### Diagrama simplificado para slide (version limpia)
 

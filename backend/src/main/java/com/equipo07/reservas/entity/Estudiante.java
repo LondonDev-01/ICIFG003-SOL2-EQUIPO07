@@ -33,6 +33,9 @@ public class Estudiante {
     @Column(name = "fecha_registro", nullable = false)
     private LocalDate fechaRegistro;
 
+    @Column(length = 60)
+    private String password;
+
     // Relación N:1 con Carrera
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_carrera", nullable = false)
