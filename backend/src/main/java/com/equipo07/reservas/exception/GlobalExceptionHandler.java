@@ -34,6 +34,16 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(body);
     }
 
+    @ExceptionHandler(com.equipo07.reservas.auth.exception.AuthException.class)
+    public ResponseEntity<Map<String, Object>> handleAuth(com.equipo07.reservas.auth.exception.AuthException ex) {
+        Map<String, Object> body = new HashMap<>();
+        body.put("timestamp", LocalDateTime.now());
+        body.put("status", HttpStatus.UNAUTHORIZED.value());
+        body.put("error", "Unauthorized");
+        body.put("message", ex.getMessage());
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(body);
+    }
+
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<Map<String, Object>> handleValidation(MethodArgumentNotValidException ex) {
         Map<String, String> errors = new HashMap<>();
