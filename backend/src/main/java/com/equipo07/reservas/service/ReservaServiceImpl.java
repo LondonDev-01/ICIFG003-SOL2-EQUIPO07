@@ -170,9 +170,9 @@ public class ReservaServiceImpl implements ReservaService {
     private void validarDisponibilidadEstudiante(Estudiante estudiante, ReservaRequestDTO request, Integer excludeReservaId) {
         // Regla 2: el estudiante no puede tener otra reserva activa en la misma fecha
         if (estudianteTieneReservaEnFecha(estudiante.getId(), request.getFechaReserva(), excludeReservaId)) {
-            throw new BusinessValidationException(
-                    "El estudiante " + estudiante.getId() + " ya tiene una reserva confirmada o pendiente en la fecha "
-                            + request.getFechaReserva());
+        	throw new IllegalStateException(
+        		    "Ya tienes una reserva activa para esta fecha. Solo puedes reservar una sala por día."
+        		);
         }
     }
 

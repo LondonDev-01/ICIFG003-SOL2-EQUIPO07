@@ -58,10 +58,13 @@ public class ReservaController {
     @PostMapping
     public ResponseEntity<ReservaResponseDTO> crear(@Valid @RequestBody ReservaRequestDTO request,
                                                     @AuthenticationPrincipal EstudiantePrincipal principal) {
+    	System.out.println("ENTRO AL CONTROLLER");
+    	System.out.println("PRINCIPAL = " + principal);
         // El id del estudiante SIEMPRE viene del JWT, no del body
         Integer idEstudiante = principal != null ? principal.estudiante().getId() : null;
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(reservaService.crear(request, idEstudiante));
+        
     }
 
     @PutMapping("/{id}")

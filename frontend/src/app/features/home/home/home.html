@@ -30,48 +30,64 @@
   <!-- Main Content -->
   <div class="home-container">
     <!-- Avisos Section -->
-    <aside class="avisos-section">
-      <div class="avisos-card">
-        <h2>
-          <i class="bi bi-info-circle"></i>
-          Avisos Importantes
-        </h2>
+    <div class="avisos-card">
 
-        <div class="aviso-item">
-          <div class="aviso-icon">
-            <i class="bi bi-clock"></i>
-          </div>
-          <div class="aviso-content">
-            <h3>Horario de biblioteca</h3>
-            <p>Lun-Vie: 08:00 - 22:00<br>Sáb: 09:00 - 18:00</p>
-          </div>
+      <div class="avisos-header">
+        <i class="bi bi-megaphone-fill"></i>
+        <h3>Avisos importantes</h3>
+      </div>
+
+      <div class="aviso-item">
+        <div class="aviso-icon horario">
+          <i class="bi bi-clock"></i>
         </div>
 
-        <div class="aviso-item">
-          <div class="aviso-icon">
-            <i class="bi bi-tools"></i>
-          </div>
-          <div class="aviso-content">
-            <h3>Mantención programada</h3>
-            <p>El sábado algunas salas podrían no estar disponibles.</p>
-          </div>
-        </div>
-
-        <div class="aviso-item">
-          <div class="aviso-icon">
-            <i class="bi bi-star"></i>
-          </div>
-          <div class="aviso-content">
-            <h3>Nuevas salas disponibles</h3>
-            <p>Hemos habilitado nuevas salas en el edificio central.</p>
-          </div>
+        <div>
+          <h4>Horario de biblioteca</h4>
+          <p>Lun-Vie: 08:00 - 22:00</p>
+          <p>Sáb: 09:00 - 18:00</p>
         </div>
       </div>
-    </aside>
+
+      <div class="aviso-item">
+        <div class="aviso-icon mantencion">
+          <i class="bi bi-tools"></i>
+        </div>
+
+        <div>
+          <h4>Mantención programada</h4>
+          <p>Algunas salas podrían no estar disponibles el sábado.</p>
+        </div>
+      </div>
+
+      <div class="aviso-item">
+        <div class="aviso-icon nuevas">
+          <i class="bi bi-megaphone"></i>
+        </div>
+
+        <div>
+          <h4>Nuevas salas disponibles</h4>
+          <p>Se habilitaron nuevas salas en el edificio central.</p>
+        </div>
+      </div>
+
+      <div class="aviso-item">
+        <div class="aviso-icon reserva">
+          <i class="bi bi-calendar-check"></i>
+        </div>
+
+        <div>
+          <h4>Recuerda tu reserva</h4>
+          <p>Puedes modificar o cancelar tu reserva.</p>
+        </div>
+      </div>
+
+    </div>
 
     <!-- Salas Destacadas Section -->
     <section class="salas-section">
-      <header class="salas-header">
+      <div class="salas-container">
+        <header class="salas-header">
         <h2>
           <i class="bi bi-star-fill"></i>
           Salas Destacadas
@@ -83,13 +99,19 @@
         <article class="sala-card">
           <div class="sala-image">
             <img src="/salas/sala101.png" alt="Sala A101">
-            <span class="sala-badge">Disponible</span>
           </div>
           <div class="sala-content">
             <h3>Sala A101</h3>
             <div class="sala-info">
-              <p><i class="bi bi-people"></i> Capacidad: 4 personas</p>
-              <p><i class="bi bi-geo-alt"></i> Edificio Central, Piso 1</p>
+              <p>
+                <i class="bi bi-people"></i>
+                <strong>Capacidad:</strong> 4 personas
+              </p>
+
+              <p>
+                <i class="bi bi-geo-alt"></i>
+                 Edificio Central, Piso 1
+              </p>
             </div>
             <button class="btn-secondary" routerLink="/salas">Ver más</button>
           </div>
@@ -98,13 +120,19 @@
         <article class="sala-card">
           <div class="sala-image">
             <img src="/salas/sala202.png" alt="Sala B302">
-            <span class="sala-badge">Disponible</span>
           </div>
           <div class="sala-content">
             <h3>Sala B302</h3>
             <div class="sala-info">
-              <p><i class="bi bi-people"></i> Capacidad: 8 personas</p>
-              <p><i class="bi bi-geo-alt"></i> Edificio Central, Piso 2</p>
+              <p>
+                <i class="bi bi-people"></i>
+                <strong>Capacidad:</strong> 8 personas
+              </p>
+
+              <p>
+                <i class="bi bi-geo-alt"></i>
+                 Edificio Central, Piso 2
+              </p>
             </div>
             <button class="btn-secondary" routerLink="/salas">Ver más</button>
           </div>
@@ -113,13 +141,19 @@
         <article class="sala-card">
           <div class="sala-image">
             <img src="/salas/sala303.png" alt="Sala C303">
-            <span class="sala-badge">Disponible</span>
           </div>
           <div class="sala-content">
             <h3>Sala C303</h3>
             <div class="sala-info">
-              <p><i class="bi bi-people"></i> Capacidad: 10 personas</p>
-              <p><i class="bi bi-geo-alt"></i> Edificio Central, Piso 3</p>
+              <p>
+                <i class="bi bi-people"></i>
+                <strong>Capacidad:</strong> 10 personas
+              </p>
+
+              <p>
+                <i class="bi bi-geo-alt"></i>
+                 Edificio Central, Piso 3
+              </p>
             </div>
             <button class="btn-secondary" routerLink="/salas">Ver más</button>
           </div>
@@ -128,18 +162,26 @@
         <article class="sala-card">
           <div class="sala-image">
             <img src="/salas/sala404.png" alt="Sala D404">
-            <span class="sala-badge">Disponible</span>
           </div>
           <div class="sala-content">
             <h3>Sala D404</h3>
             <div class="sala-info">
-              <p><i class="bi bi-people"></i> Capacidad: 12 personas</p>
-              <p><i class="bi bi-geo-alt"></i> Edificio Norte, Piso 4</p>
+              <p>
+                <i class="bi bi-people"></i>
+                <strong>Capacidad:</strong> 12 personas
+              </p>
+
+              <p>
+                <i class="bi bi-geo-alt"></i>
+                 Edificio Norte, Piso 4
+              </p>
             </div>
             <button class="btn-secondary" routerLink="/salas">Ver más</button>
           </div>
         </article>
       </div>
+      </div>
+
     </section>
   </div>
 </main>

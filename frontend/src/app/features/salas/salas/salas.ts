@@ -25,7 +25,7 @@ export class Salas implements OnInit {
   salasFiltradas: Sala[] = [];
   textoBusqueda: string = '';
   capacidadSeleccionada: string = '';
-  fechaSeleccionada: string = '';
+  fechaSeleccionada: string = new Date().toISOString().split('T')[0];
   ordenSeleccionado: string = 'nombre';
 
   constructor(
@@ -101,7 +101,15 @@ export class Salas implements OnInit {
   }
 
   irAReservar(salaId: number): void {
-    this.router.navigate(['/reservar'], { queryParams: { salaId } });
+    this.router.navigate(
+      ['/reservar'],
+      {
+        queryParams: {
+          salaId: salaId,
+          fecha: this.fechaSeleccionada
+        }
+      }
+    );
   }
 
   obtenerImagen(codigoSala: string): string {

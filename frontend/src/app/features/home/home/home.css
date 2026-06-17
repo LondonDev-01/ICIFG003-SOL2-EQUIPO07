@@ -1,11 +1,14 @@
 /* Home Main Container */
 .home-main {
     width: 100%;
+    padding-top: 75px;
+    
+    
 }
 
 /* Hero Section */
 .hero {
-    min-height: 350px;
+    min-height: 300px;
     background-image: url('/biblioteca-hero.png');
     background-size: cover;
     background-position: center center;
@@ -63,7 +66,7 @@
 }
 
 .hero-content h1 {
-    font-size: 48px;
+    font-size: 42px;
     font-weight: 700;
     color: #0a3575;
 
@@ -71,7 +74,7 @@
 }
 
 .hero-content p {
-    font-size: 24px;
+    font-size: 22px;
     color: #333;
 
     margin-bottom: 24px;
@@ -110,9 +113,9 @@
 .home-container {
     max-width: 1400px;
     margin: 0 auto;
-    padding: 15px 90px 0px 90px;
+    padding: 0px 30px;
     display: grid;
-    grid-template-columns: 280px 1fr;
+    grid-template-columns: 240px 1fr;
     gap: 40px;
 }
 
@@ -120,17 +123,26 @@
 .avisos-section {
     grid-column: 1;
     margin-top: 15px;
-    
+    width: 370px;
+    margin-left: -150px;
 }
 
 .avisos-card {
+    width: 550px;
+    min-height: 450px;
+
     background: white;
     border-radius: 12px;
-    padding: 24px 30px;
+    padding: 0;
+
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-    position: sticky;
-    top: 100px;
-    margin-bottom: 40px;
+
+    overflow: hidden;
+    margin-left: -230px;
+    transform: scale(0.89);
+    position: relative;
+    top: -1px;
+    
     
 }
 
@@ -144,6 +156,7 @@
     gap: 10px;
     padding-bottom: 15px;
     border-bottom: 1px solid #e2e7ec;
+    
 }
 
 .avisos-card h2 i {
@@ -155,6 +168,10 @@
     gap: 15px;
     padding: 15px 0;
     border-bottom: 1px solid #eee;
+    transform: translateX(75px);
+    font-size: 21px;
+    
+    
 }
 
 .aviso-item:last-child {
@@ -175,22 +192,110 @@
 }
 
 .aviso-content h3 {
-    font-size: 15px;
+    font-size: 21px;
     font-weight: 600;
     color: #012b5e;
     margin: 0 0 5px 0;
 }
 
 .aviso-content p {
-    font-size: 13px;
+    font-size: 16px;
     color: #666;
     margin: 0;
     line-height: 1.5;
 }
 
+.avisos-img {
+    width: 550px;
+    height: 100%;
+    object-fit: contain;
+    display: block;
+    border-radius: 12px;
+    margin-top: 15px;
+    display: block;
+    
+}
+
+.avisos-header{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    margin-bottom:20px;
+    color:#002d72;
+    justify-content: center;
+}
+
+.avisos-header h3{
+    margin:0;
+    font-size:1.8rem;
+    font-weight:700;
+}
+
+.aviso-item{
+    display:flex;
+    gap:15px;
+    padding:18px 0;
+    border-bottom:1px solid #eee;
+}
+
+.aviso-item:last-child{
+    border-bottom:none;
+}
+
+.aviso-icon{
+    width:60px;
+    height:60px;
+    border-radius:50%;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    font-size:1.5rem;
+}
+
+.horario{
+    background:#eaf2ff;
+    color:#003b8e;
+}
+
+.mantencion{
+    background:#fff4dd;
+    color:#e09a00;
+}
+
+.nuevas{
+    background:#e8f7e8;
+    color:#2e7d32;
+}
+
+.reserva{
+    background:#f2ecff;
+    color:#7b61d1;
+}
+
+.aviso-item h4{
+    margin:0 0 5px 0;
+    color:#002d72;
+}
+
+.aviso-item p{
+    margin:0;
+    color:#222;
+    font-size:.95rem;
+}
+
+.avisos-card{
+    background:white;
+    border-radius:16px;
+    padding:25px;
+    box-shadow:0 4px 15px rgba(0,0,0,.08);
+}
+
 /* Salas Section */
 .salas-section {
     grid-column: 2;
+    transform: scale(0.9);
+    position: relative;
+    top: -1px;
 }
 
 .salas-header {
@@ -201,20 +306,20 @@
 }
 
 .salas-header h2 {
-    font-size: 22px;
+    font-size:1.5rem;
     font-weight: 700;
     color: #012b5e;
     margin: 0;
     display: flex;
     align-items: center;
     gap: 10px;
-    transform: translateY(15px);
-    margin-top: 10px
+    transform: translateY(0px);
+    margin-top: 0px
 }
 
 .salas-header h2 i {
     font-size: 22px;
-    color: #ffc107;
+    color: #012b5e;
 }
 
 .link-all {
@@ -222,7 +327,7 @@
     text-decoration: none;
     font-weight: 600;
     transition: color 0.3s ease;
-    transform: translateY(30px);
+    transform: translateY(20px);
 }
 
 .link-all:hover {
@@ -236,30 +341,27 @@
     gap: 25px;
     justify-content: flex-start;
     margin-top: -1px;
+    
 }
 
 .sala-card {
     background: white;
-
     border-radius: 12px;
-
-    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-
+    box-shadow: 0 4px 15px rgba(0,0,0,0.12);
     overflow: hidden;
-
-    width: 250px;
-    min-height: 340px;
+    width: 300px;
+    min-height: 389px;
 }
 
 .sala-card:hover {
-    transform: translateY(-8px);
+    transform: translateY(-5px);
     box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
 }
 
 .sala-image {
     position: relative;
     width: 100%;
-    height: 150px;
+    height: 180px;
     overflow: hidden;
     background: #f5f5f5;
 }
@@ -293,14 +395,16 @@
 }
 
 .sala-content {
-    padding: 25px;
+    padding: 35px 25px 25px 25px;
 }
 
 .sala-content h3 {
-    font-size: 18px;
+    font-size: 21px;
+    margin-bottom: 20px;
     font-weight: 700;
     color: #012b5e;
     margin: 0 0 15px 0;
+    transform: translateY(-15px);
 }
 
 .sala-info {
@@ -311,9 +415,9 @@
     display: flex;
     align-items: center;
     gap: 8px;
-    font-size: 13px;
-    color: #666;
-    margin: 8px 0;
+    font-size: 15px;
+    color:#222;
+    margin: 12px 0;
 }
 
 .sala-info i {
@@ -321,17 +425,27 @@
     font-size: 14px;
 }
 
+.salas-container {
+    background: white;
+    border-radius: 12px;
+    padding: 25px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+    margin-top: 4px;
+    min-height: 450px;
+}
+
 .btn-secondary {
     width: 100%;
-    padding: 10px;
+    padding: 12px;
     background-color: white;
     color: #103863;
     border: 2px solid #204872;
     border-radius: 8px;
-    font-size: 14px;
+    font-size: 15px;
     font-weight: 600;
     cursor: pointer;
     transition: all 0.3s ease;
+    margin-top: 20px;
     
 }
 
@@ -357,6 +471,7 @@
 
     .avisos-card {
         position: static;
+        
     }
 
     .hero-content h1 {
@@ -404,10 +519,12 @@
 
     .avisos-card {
         padding: 20px;
+        
     }
 
     .avisos-card h2 {
         font-size: 18px;
+        
     }
 
     .salas-header h2 {
@@ -479,7 +596,7 @@
     }
 
     .sala-content h3 {
-        font-size: 16px;
+        font-size: 21px;
     }
 
     .sala-info p {

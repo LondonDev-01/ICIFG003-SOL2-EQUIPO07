@@ -47,7 +47,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         try {
             Claims claims = jwtService.parse(token);
             String rut = claims.getSubject();
+            System.out.println("RUT JWT = " + rut);
             Optional<Estudiante> estudianteOpt = estudianteRepository.findByRut(rut);
+            System.out.println("USUARIO ENCONTRADO = " + estudianteOpt.isPresent());
             if (estudianteOpt.isPresent() && SecurityContextHolder.getContext().getAuthentication() == null) {
                 Estudiante estudiante = estudianteOpt.get();
                 UserDetails userDetails = User.withUsername(rut)
@@ -57,6 +59,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 // Custom principal: el Estudiante completo, no solo el RUT
                 UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(
                         new EstudiantePrincipal(estudiante), null, userDetails.getAuthorities());
+                System.out.println("AUTENTICANDO USUARIO");
                 SecurityContextHolder.getContext().setAuthentication(auth);
             }
         } catch (JwtException ex) {

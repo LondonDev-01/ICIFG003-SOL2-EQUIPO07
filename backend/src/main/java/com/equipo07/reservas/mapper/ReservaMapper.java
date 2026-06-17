@@ -21,6 +21,7 @@ public interface ReservaMapper {
             @Mapping(source = "sala.nombreSala", target = "nombreSala"),
             @Mapping(source = "horario.id", target = "idHorario"),
             @Mapping(source = "horario.horaInicio", target = "bloqueHorario", dateFormat = "HH:mm"),
+            @Mapping(source = "horario.horaTermino", target = "horaTermino", dateFormat = "HH:mm"),
             @Mapping(source = "estado.idEstado", target = "idEstado"),
             @Mapping(source = "estado.nombreEstado", target = "nombreEstado")
     })

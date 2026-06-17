@@ -26,6 +26,7 @@ public class ReservaResponseDTO {
 
     private Integer idHorario;
     private String bloqueHorario;
+    private String horaTermino;
 
     private Integer idEstado;
     private String nombreEstado;

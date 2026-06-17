@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators, AbstractControl, ValidationErrors } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { ActivatedRoute, Router } from '@angular/router';
+import { AuthService } from '../../../core/services/auth.service';
 
 @Component({
   selector: 'app-reserva-form',
@@ -16,6 +17,7 @@ export class ReservaForm implements OnInit {
   private readonly http = inject(HttpClient);
   private readonly router = inject(Router);
   private readonly route = inject(ActivatedRoute);
+  private readonly authService = inject(AuthService);
 
   reservaForm!: FormGroup;
   readonly cargando = signal(false);
@@ -26,14 +28,25 @@ export class ReservaForm implements OnInit {
   readonly salas = signal<any[]>([]);
   readonly horarios = signal<any[]>([]);
   readonly estados = signal<any[]>([]);
+  readonly reservasExistentes = signal<any[]>([]);
 
   isEditMode = false;
   reservaId: number | null = null;
   salaSeleccionada: any = null;
+  nombreUsuario = '';
 
   ngOnInit(): void {
+
+    const usuario = this.authService.currentUser();
+
+    if (usuario) {
+      this.nombreUsuario = usuario.nombre;
+    }
+
     const salaIdParam = this.route.snapshot.queryParamMap.get('salaId');
     const idParam = this.route.snapshot.paramMap.get('id');
+    const fechaParam = this.route.snapshot.queryParamMap.get('fecha');
+    
 
     if (idParam) {
       this.isEditMode = true;
@@ -42,10 +55,22 @@ export class ReservaForm implements OnInit {
 
     this.reservaForm = this.fb.group({
       idSala: [salaIdParam || '', [Validators.required]],
-      fecha: ['', [Validators.required, this.fechaNoPasadaValidator]],
+      fecha: [fechaParam || '', [Validators.required, this.fechaNoPasadaValidator]],
       idHorario: ['', [Validators.required]],
       idEstado: ['', [Validators.required]],
       observaciones: ['', [Validators.required, Validators.minLength(15)]]
+    });
+
+    if (!fechaParam) {
+      const hoy = new Date().toISOString().split('T')[0];
+
+      this.reservaForm.patchValue({
+        fecha: hoy
+      });
+    }
+
+    this.reservaForm.patchValue({
+      idEstado: 2
     });
 
     this.cargarCatalogos();
@@ -53,7 +78,15 @@ export class ReservaForm implements OnInit {
     if (this.isEditMode) {
       this.cargarReserva();
     }
+
+    this.cargarReservas();
+
+    this.reservaForm.get('fecha')?.valueChanges.subscribe(() => {
+      this.cargarReservas();
+    });
   }
+
+  
 
   cargarReserva(): void {
     if (!this.reservaId) return;
@@ -74,20 +107,112 @@ export class ReservaForm implements OnInit {
 
   cargarCatalogos(): void {
     this.http.get<any[]>('http://localhost:8080/api/carreras').subscribe((d) => this.carreras.set(d));
-    this.http.get<any[]>('http://localhost:8080/api/salas').subscribe((d) => this.salas.set(d));
+    this.http.get<any[]>('http://localhost:8080/api/salas').subscribe((d) => {
+      this.salas.set(d);
+
+      const salaId = this.route.snapshot.queryParamMap.get('salaId');
+
+      if (salaId) {
+        this.salaSeleccionada = d.find(
+          s => s.id === Number(salaId)
+        );
+      }
+    });
     this.http.get<any[]>('http://localhost:8080/api/horarios').subscribe((d) => this.horarios.set(d));
     this.http.get<any[]>('http://localhost:8080/api/estados-reserva').subscribe((d) => this.estados.set(d));
   }
 
-  fechaNoPasadaValidator(control: AbstractControl): ValidationErrors | null {
-    if (!control.value) return null;
-    const seleccionada = new Date(control.value);
+  obtenerImagenSala(): string {
+
+  switch (this.salaSeleccionada?.codigoSala) {
+
+    case 'A101':
+      return '/salas/sala101.png';
+
+    case 'B202':
+      return '/salas/sala202.png';
+
+    case 'C303':
+      return '/salas/sala303.png';
+
+    case 'D404':
+      return '/salas/sala404.png';
+
+    case 'E505':
+      return '/salas/sala505.png';
+
+    case 'F606':
+      return '/salas/sala606.png';
+
+    default:
+      return '/salas/sala101.png';
+  }
+}
+
+cargarReservas(): void {
+
+  const salaId = this.route.snapshot.queryParamMap.get('salaId');
+  const fechaSeleccionada = this.reservaForm?.get('fecha')?.value;
+
+  if (!salaId) return;
+
+  this.http.get<any[]>('http://localhost:8080/api/reservas')
+    .subscribe({
+      next: (reservas) => {
+
+        const filtradas = reservas.filter(
+          r =>
+            r.idSala === Number(salaId) &&
+            (!fechaSeleccionada || r.fechaReserva === fechaSeleccionada)
+        );
+
+        this.reservasExistentes.set(filtradas);
+
+        const horariosActualizados = this.horarios().map(h => ({
+          ...h,
+          reservado: filtradas.some(r => r.idHorario === h.id)
+        }));
+
+        this.horarios.set(horariosActualizados);
+
+      }
+    });
+
+}
+
+ fechaNoPasadaValidator(
+    control: AbstractControl
+  ): ValidationErrors | null {
+
+    if (!control.value) {
+      return null;
+    }
+
+    const partes = control.value.split('-');
+
+    const fechaSeleccionada = new Date(
+      Number(partes[0]),
+      Number(partes[1]) - 1,
+      Number(partes[2])
+    );
+
     const hoy = new Date();
+
     hoy.setHours(0, 0, 0, 0);
-    return seleccionada < hoy ? { fechaPasada: true } : null;
+
+    if (fechaSeleccionada < hoy) {
+      return { fechaPasada: true };
+    }
+
+    return null;
   }
 
   onSubmit(): void {
+
+    console.log('BOTON PRESIONADO');
+    console.log(this.reservaForm.value);
+    console.log('VALIDO:', this.reservaForm.valid);
+
     if (this.reservaForm.invalid) {
       this.reservaForm.markAllAsTouched();
       return;
@@ -128,7 +253,7 @@ export class ReservaForm implements OnInit {
         },
         error: (err) => {
           this.cargando.set(false);
-          this.error.set(err.error?.message || 'Error al crear la reserva');
+          this.error.set(err.error?.message || 'Ya tienes una reserva activa para esta fecha. Solo puedes reservar una sala por día');
         }
       });
     }

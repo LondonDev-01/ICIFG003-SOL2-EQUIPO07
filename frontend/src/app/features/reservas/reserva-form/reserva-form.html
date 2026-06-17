@@ -1,69 +1,268 @@
-<div class="reserva-form-card">
-  <h2>Solicitud de Reserva</h2>
-  <p *ngIf="salaSeleccionada">Sala seleccionada: <strong>{{ salaSeleccionada.nombreSala }}</strong></p>
+<div class="page-header">
 
-  <form [formGroup]="reservaForm" (ngSubmit)="onSubmit()">
+  <h1>Reservar Sala de Estudio</h1>
 
-    <div class="form-group">
-      <label>Sala</label>
-      <select formControlName="idSala">
-        <option value="" disabled>Seleccione una sala</option>
-        <option *ngFor="let s of salas()" [value]="s.id">{{ s.nombreSala }} - Piso {{ s.piso }} (Cap: {{ s.capacidad }})</option>
-      </select>
-      <div class="error" *ngIf="reservaForm.get('idSala')?.invalid && reservaForm.get('idSala')?.touched">
-        La sala es obligatoria
+  <p>
+    Completa el formulario para solicitar tu reserva. Revisa las reservas existentes para la fecha seleccionada.
+  </p>
+
+</div>
+
+<div class="reserva-container">
+  <div class="left-column">
+
+  <!-- Panel izquierdo -->
+  <div class="sala-info-card">
+
+    <h2 class="card-title">
+      <i class="bi bi-journal-text"></i>
+      Información de la Sala
+    </h2>
+    <div class="sala-header" *ngIf="salaSeleccionada">
+
+      <img
+        [src]="obtenerImagenSala()"
+        alt="Sala"
+        class="sala-img">
+
+      <div class="sala-detalles">
+
+        <h3>{{ salaSeleccionada.nombreSala }}</h3>
+
+        <p>
+  <i class="bi bi-people-fill"></i>
+  <strong>Capacidad:</strong>
+  {{ salaSeleccionada.capacidad }} personas
+
+</p>
+
+<p>
+  <i class="bi bi-geo-alt-fill"></i>
+  <strong>Ubicación:</strong>
+  Piso {{ salaSeleccionada.piso }}
+</p>
+
+<p>
+  <i class="bi bi-building-fill"></i>
+  <strong>Edificio:</strong>
+  {{ salaSeleccionada.nombreEdificio }}
+</p>
+
+<p>
+  <i class="bi bi-clock-fill"></i>
+  <strong>Horario disponible:</strong>
+  08:00 - 22:00 hrs
+</p>
+
       </div>
+
     </div>
 
-    <div class="form-group row">
-      <div class="col">
-        <label>Fecha</label>
-        <input type="date" formControlName="fecha">
-        <div class="error" *ngIf="reservaForm.get('fecha')?.invalid && reservaForm.get('fecha')?.touched">
-          <span *ngIf="reservaForm.get('fecha')?.errors?.['required']">La fecha es obligatoria.</span>
-          <span *ngIf="reservaForm.get('fecha')?.errors?.['fechaPasada']">No puede ser anterior al día actual.</span>
-        </div>
-      </div>
-      <div class="col">
-        <label>Horario</label>
-        <select formControlName="idHorario">
-          <option value="" disabled>Seleccione un horario</option>
-          <option *ngFor="let h of horarios()" [value]="h.id">
-            {{ h.horaInicio }} - {{ h.horaTermino }}
-          </option>
-        </select>
-        <div class="error" *ngIf="reservaForm.get('idHorario')?.invalid && reservaForm.get('idHorario')?.touched">
-          El horario es obligatorio
-        </div>
-      </div>
-    </div>
+  </div>
 
-    <div class="form-group">
-      <label>Estado de la reserva</label>
-      <select formControlName="idEstado">
-        <option value="" disabled>Seleccione un estado</option>
-        <option *ngFor="let e of estados()" [value]="e.idEstado">{{ e.nombreEstado }}</option>
-      </select>
-    </div>
+  <!-- Panel izquierdo, parte de abajo -->
+   <div class="reservas-card">
 
-    <div class="form-group">
-      <label>Observaciones</label>
-      <textarea formControlName="observaciones" rows="3" placeholder="Indique para qué se está reservando (mínimo 15 caracteres)"></textarea>
-      <div class="error" *ngIf="reservaForm.get('observaciones')?.invalid && reservaForm.get('observaciones')?.touched">
-        <span *ngIf="reservaForm.get('observaciones')?.errors?.['required']">Las observaciones son obligatorias.</span>
-        <span *ngIf="reservaForm.get('observaciones')?.errors?.['minlength']">Mínimo 15 caracteres.</span>
-      </div>
-    </div>
+    <h2 class="card-title">
+      <i class="bi bi-calendar-check"></i>
+      Reservas existentes para esta sala
+    </h2>
 
-    <p class="info-jwt">
-      <i>Tu identidad se obtendrá automáticamente del token de sesión. No es necesario identificarse manualmente.</i>
+    <p class="fecha-seleccionada">
+      Fecha seleccionada:
+      <strong>
+        {{ reservaForm.get('fecha')?.value | date:'dd-MM-yyyy' }}
+      </strong>
     </p>
 
-    <div class="success-msg" *ngIf="exito()">¡Reserva creada con éxito! Redirigiendo a tus reservas...</div>
-    <div class="error-msg" *ngIf="error()">{{ error() }}</div>
+    <table>
 
-    <button type="submit" class="btn-submit" [disabled]="cargando() || reservaForm.invalid">
-      {{ cargando() ? 'Enviando...' : 'Confirmar Reserva' }}
-    </button>
-  </form>
+      <thead>
+        <tr>
+          <th>Inicio</th>
+          <th>Fin</th>
+          <th>Reserva</th>
+          <th>Estado</th>
+        </tr>
+      </thead>
+
+      <tbody>
+
+        <tr *ngFor="let r of reservasExistentes()">
+
+          <td>{{ r.bloqueHorario }}</td>
+
+          <td>{{ r.horaTermino }}</td>
+
+          <td>{{ r.nombreEstudiante }}</td>
+
+          <td>{{ r.nombreEstado }}</td>
+
+        </tr>
+
+        <tr *ngIf="reservasExistentes().length === 0">
+
+          <td colspan="4">
+            No existen reservas para esta fecha
+          </td>
+
+        </tr>
+
+      </tbody>
+
+    </table>
+
+    <p class="total-reservas">
+      Total reservas: {{ reservasExistentes().length }}
+    </p>
+
+  </div>
+  </div>
+
+
+
+  <!-- Panel derecho -->
+  <div class="reserva-form-card">
+
+    <h2 class="card-title">
+      <i class="bi bi-pencil-square"></i>
+      {{ isEditMode ? 'Editar Reserva' : 'Formulario de solicitud de reserva' }}
+    </h2>
+
+    <form [formGroup]="reservaForm" (ngSubmit)="onSubmit()">
+
+      <!-- Mantengo la sala oculta para no romper la lógica -->
+      <input type="hidden" formControlName="idSala">
+
+        <div class="form-group">
+
+          <label>Estudiante</label>
+
+          <input
+            type="text"
+            [value]="nombreUsuario"
+            readonly>
+
+        </div>
+
+        <div class="form-group">
+
+          <label>Fecha</label>
+
+          <input
+            type="date"
+            formControlName="fecha">
+
+          <div
+            class="error"
+            *ngIf="reservaForm.get('fecha')?.invalid && reservaForm.get('fecha')?.touched">
+
+            <span *ngIf="reservaForm.get('fecha')?.errors?.['required']">
+              La fecha es obligatoria.
+            </span>
+
+            <span *ngIf="reservaForm.get('fecha')?.errors?.['fechaPasada']">
+              No puede ser anterior al día actual.
+            </span>
+
+          </div>
+
+        </div>
+
+        <div class="form-group">
+
+          <label>Horario disponible</label>
+
+          <select formControlName="idHorario">
+
+            <option value="" disabled>
+              Seleccione un horario
+            </option>
+
+            <option
+              *ngFor="let h of horarios()"
+              [value]="h.id"
+              [disabled]="h.reservado">
+
+              {{ h.horaInicio }} - {{ h.horaTermino }}
+              {{ h.reservado ? '(Reservado)' : '' }}
+
+            </option>
+
+          </select>
+
+          <div
+            class="error"
+            *ngIf="reservaForm.get('idHorario')?.invalid && reservaForm.get('idHorario')?.touched">
+
+            El horario es obligatorio
+
+          </div>
+
+        </div>
+
+      <!-- Mantengo estado oculto para no romper backend -->
+      <input type="hidden" formControlName="idEstado">
+
+      <div class="form-group">
+
+        <label>Observaciones</label>
+
+        <textarea
+          formControlName="observaciones"
+          rows="5"
+          placeholder="Describe el motivo de la reserva...">
+        </textarea>
+
+        <div
+          class="error"
+          *ngIf="reservaForm.get('observaciones')?.invalid && reservaForm.get('observaciones')?.touched">
+
+          <span *ngIf="reservaForm.get('observaciones')?.errors?.['required']">
+            Las observaciones son obligatorias.
+          </span>
+
+          <span *ngIf="reservaForm.get('observaciones')?.errors?.['minlength']">
+            Mínimo 15 caracteres.
+          </span>
+
+        </div>
+
+      </div>
+
+      <p class="info-jwt">
+        <i>
+          Tu identidad se obtendrá automáticamente desde tu sesión.
+        </i>
+      </p>
+
+      <div
+        class="success-msg"
+        *ngIf="exito()">
+
+        ¡Reserva creada con éxito! Redirigiendo...
+
+      </div>
+
+      <div
+        class="error-msg"
+        *ngIf="error()">
+
+        {{ error() }}
+
+      </div>
+
+      <button
+        type="submit"
+        class="btn-submit"
+        [disabled]="cargando() || reservaForm.invalid">
+
+        {{ cargando() ? 'Enviando...' : 'Confirmar Reserva' }}
+
+      </button>
+
+    </form>
+
+  </div>
+
 </div>

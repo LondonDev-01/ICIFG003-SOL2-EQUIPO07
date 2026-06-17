@@ -1,36 +1,191 @@
+.page-header{
+    max-width:1200px;
+    margin:5.7rem auto 1.5rem auto;
+}
+
+.page-header h1{
+    color:#0a3478;
+    font-size:2.2rem;
+    margin-bottom:.5rem;
+}
+
+.page-header p{
+    color:#6b7280;
+    font-size:1.1rem;
+}
+
+.reserva-container {
+    max-width: 1300px;
+    margin: 0 auto 2rem auto;
+
+    display: grid;
+    grid-template-columns: 690px 1fr;
+    gap: 30px;
+}
+
+.left-column{
+    display:flex;
+    flex-direction:column;
+    gap:30px;
+}
+
+/* CODIGO INSERTADO */
+
+.sala-header{
+    display:flex;
+    gap:20px;
+    align-items:flex-start;
+}
+
+.sala-img{
+    width:330px;
+    height:200px;
+    object-fit:cover;
+    border-radius:12px;
+    flex-shrink:0;
+}
+
+.sala-detalles{
+    flex:1;
+}
+
+.sala-detalles h3{
+    color:#0a3478;
+    margin-bottom:15px;
+}
+
+
+/* PANEL IZQUIERDO */
+
+.sala-info-card {
+    background: white;
+    border-radius: 18px;
+    padding: 25px;
+    padding-bottom:0px;
+
+    box-shadow: 0 4px 18px rgba(0,0,0,.08);
+
+    height: fit-content;
+}
+
+.sala-info-card h2 {
+    color: #0a3478;
+    margin-bottom: 17px;
+    font-size: 1.5rem;
+}
+
+.sala-info-card h3 {
+    color: #0a3478;
+    font-size: 20px;
+    margin-bottom: 15px;
+    position: relative;
+    top: -16px;
+}
+
+.sala-info-card > *{
+    position: relative;
+    top: -23px;
+}
+
+.sala-info-card p {
+    color: #333;
+    margin-bottom: 12px;
+    line-height: 1.5;
+    position: relative;
+    top: -12px;
+}
+
+.reservas-card{
+    background:white;
+    border-radius:18px;
+    padding:25px;
+    box-shadow:0 4px 18px rgba(0,0,0,.08);
+}
+
+.reservas-card h2{
+    color:#0a3478;
+    margin-bottom:15px;
+    font-size: 1.5rem;
+}
+
+.reservas-card > *{
+    position: relative;
+    top: -25px;
+}
+
+.fecha-seleccionada{
+    margin-bottom:15px;
+    font-weight:600;
+}
+
+.reservas-card table{
+    width:100%;
+    border-collapse:collapse;
+}
+
+.reservas-card th,
+.reservas-card td{
+    border:1px solid #e5e7eb;
+    padding:10px;
+    text-align:center;
+}
+
+.reservas-card th{
+    background:#f8fafc;
+}
+
+.total-reservas{
+    margin-top:15px;
+    font-weight:600;
+}
+
+/* PANEL DERECHO */
+
 .reserva-form-card {
     background: white;
-    padding: 30px;
-    border-radius: 12px;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-    max-width: 600px;
-    margin: 20px auto;
+    border-radius: 18px;
+    padding-top: 0px;
+    padding-right: 35px;
+    padding-bottom: 35px;
+    padding-left: 35px;
+    box-shadow: 0 4px 18px rgba(0,0,0,.08);
 }
 
 .reserva-form-card h2 {
-    color: #0a3575;
-    margin-bottom: 20px;
+    color: #0a3478;
+    margin-bottom: 25px;
+    font-size: 1.5rem;
 }
+
+/* FORMULARIO */
 
 .form-group {
     margin-bottom: 20px;
-    position: relative;
 }
 
 .form-group label {
     display: block;
-    font-weight: bold;
+
     margin-bottom: 8px;
-    color: #333;
+
+    font-weight: 600;
+
+    color: #0a3478;
 }
 
 .form-group input,
 .form-group select,
 .form-group textarea {
     width: 100%;
+
     padding: 12px;
-    border: 1px solid #ddd;
-    border-radius: 8px;
+
+    border: 1px solid #d1d5db;
+
+    border-radius: 10px;
+
+    font-size: 15px;
+
     box-sizing: border-box;
 }
 
@@ -38,98 +193,147 @@
 .form-group select:focus,
 .form-group textarea:focus {
     outline: none;
-    border-color: #0a3575;
+    border-color: #0a3478;
 }
 
-.row {
-    display: flex;
-    gap: 20px;
+textarea {
+    resize: vertical;
 }
 
-.col {
-    flex: 1;
-}
+/* MENSAJES */
 
 .error {
-    color: #d9534f;
-    font-size: 0.85em;
+    color: #dc2626;
+    font-size: .85rem;
     margin-top: 5px;
 }
 
-.btn-submit {
-    background: #0a3575;
-    color: white;
-    border: none;
-    padding: 15px;
-    width: 100%;
+.error-msg {
+    background: #fef2f2;
+    color: #991b1b;
+
+    padding: 12px;
+
     border-radius: 8px;
-    font-size: 1em;
-    font-weight: bold;
-    cursor: pointer;
-    margin-top: 10px;
+
+    margin-bottom: 15px;
 }
 
-.btn-submit:disabled {
-    background: #ccc;
-    cursor: not-allowed;
-}
-
-/* Autocomplete */
-.autocomplete-items {
-    position: absolute;
-    border: 1px solid #d4d4d4;
-    border-bottom: none;
-    border-top: none;
-    z-index: 99;
-    top: 100%;
-    left: 0;
-    right: 0;
-    background: white;
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    max-height: 150px;
-    overflow-y: auto;
-}
-
-.autocomplete-items li {
-    padding: 10px;
-    cursor: pointer;
-    border-bottom: 1px solid #d4d4d4;
-}
-
-.autocomplete-items li:hover {
-    background-color: #e9e9e9;
-}
 .success-msg {
-  background: #d1fae5;
-  color: #065f46;
-  padding: 0.75rem 1rem;
-  border-radius: 6px;
-  margin-bottom: 1rem;
-  font-size: 0.9rem;
-}
+    background: #d1fae5;
+    color: #065f46;
 
-select {
-  width: 100%;
-  padding: 0.6rem 0.75rem;
-  border: 1px solid #d1d5db;
-  border-radius: 6px;
-  font-size: 0.95rem;
-  background: white;
-}
+    padding: 12px;
 
-select:focus {
-  outline: none;
-  border-color: #2563eb;
+    border-radius: 8px;
+
+    margin-bottom: 15px;
 }
 
 .info-jwt {
-  background: #eff6ff;
-  color: #1e40af;
-  padding: 0.5rem 0.75rem;
-  border-radius: 6px;
-  font-size: 0.8rem;
-  margin-bottom: 0.5rem;
-  border-left: 3px solid #3b82f6;
+    background: #eef4ff;
+
+    color: #1e40af;
+
+    padding: 12px;
+
+    border-radius: 8px;
+
+    border-left: 4px solid #3b82f6;
+
+    margin-bottom: 20px;
+
+    font-size: .9rem;
+}
+
+/* BOTÓN */
+
+.btn-submit {
+    width: 100%;
+
+    padding: 15px;
+
+    border: none;
+
+    border-radius: 10px;
+
+    background: #003b99;
+
+    color: white;
+
+    font-size: 1rem;
+
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition: .3s;
+}
+
+.btn-submit:hover {
+    background: #0a3478;
+}
+
+.btn-submit:disabled {
+    background: #93c5fd;
+    cursor: not-allowed;
+}
+
+/* CSS para los iconos de los titulos */
+
+.card-title{
+    display:flex;
+    align-items:center;
+    gap:12px;
+
+    color:#0a3478;
+    font-size:1.8rem;
+    margin-bottom:20px;
+}
+
+.card-title i{
+    font-size:1.3rem;
+    position: relative;
+    top: -0px;
+}
+
+.sala-detalles p{
+    display:flex;
+    align-items:center;
+    gap:10px;
+}
+
+.sala-detalles i{
+    color:#111827;
+    font-size:1rem;
+}
+
+input[readonly]{
+    background:#f8fafc;
+    font-weight:600;
+    color:#374151;
+    cursor:not-allowed;
+}
+
+/* RESPONSIVE */
+
+@media (max-width: 1024px) {
+
+    .reserva-container {
+        grid-template-columns: 1fr;
+    }
+
+}
+
+@media (max-width: 768px) {
+
+    .row {
+        flex-direction: column;
+    }
+
+    .reserva-form-card,
+    .sala-info-card {
+        padding: 20px;
+    }
+
 }
