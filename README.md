@@ -14,85 +14,108 @@ Este repositorio contiene dos componentes principales: el backend (Spring Boot, 
 - `backend/` - API Spring Boot (Maven)
 - `frontend/` - Aplicación Angular
 
-**Arrancar el backend (Windows)**
-1. Abrir PowerShell o cmd
+# **Configuración de Base de Datos**
+
+1. Abrir PostgreSQL (psql):
+
+```sql
+psql -U postgres
+```
+
+2. Crear la base de datos:
+
+```sql
+CREATE DATABASE test;
+```
+
+**Importante:** No es necesario crear tablas ni insertar datos manualmente. El sistema genera automáticamente toda la estructura y los datos de prueba al iniciar el backend.
+
+---
+
+## **Arrancar el Backend (Windows)**
+
+1. Abrir PowerShell o CMD.
 2. Ir al directorio del backend:
 
 ```powershell
 cd backend
 ```
 
-3a. Ejecutar con el wrapper (recomendado):
+3. Ejecutar Spring Boot:
 
 ```powershell
 .\mvnw.cmd spring-boot:run
 ```
 
-3b. O con Maven instalado globalmente:
+o alternativamente:
 
 ```powershell
 mvn spring-boot:run
 ```
 
-4. El servicio arrancará por defecto en `http://localhost:8080`.
+4. El backend quedará disponible en:
 
-5. Para crear el JAR:
-
-```powershell
-.\mvnw.cmd clean package
-java -jar target\reservas-0.0.1-SNAPSHOT.jar
+```text
+http://localhost:8080
 ```
 
-**Notas de configuración (backend)**
-- Archivo de configuración: `backend/src/main/resources/application.properties`.
-- Por defecto está configurado para PostgreSQL en `jdbc:postgresql://localhost:5432/test` con usuario `postgres` y contraseña `1234`.
-- Si no quiere usar PostgreSQL, puede cambiar la configuración para usar H2 (la dependencia de H2 ya está incluida en `pom.xml`).
+### **¿Qué ocurre al iniciar el backend?**
 
-**Arrancar el frontend**
-1. Abrir terminal y moverse al directorio del frontend:
+- Hibernate crea automáticamente las tablas.
+- Se ejecuta el archivo `data.sql`.
+- Se cargan carreras, edificios, salas, horarios, estudiantes y reservas de prueba.
+
+---
+
+## **Arrancar el Frontend**
+
+1. Abrir una nueva terminal.
+2. Ir al directorio del frontend:
 
 ```powershell
 cd frontend
 ```
 
-2. Instalar dependencias:
+3. Instalar dependencias:
 
 ```powershell
 npm install
 ```
 
-3. Ejecutar la app Angular (desarrollo):
+4. Ejecutar Angular:
+
+```powershell
+ng serve
+```
+
+o:
 
 ```powershell
 npm start
 ```
 
-4. El frontend por defecto servirá en `http://localhost:4200`.
+5. El frontend quedará disponible en:
 
-**Construcción para producción (frontend)**
-
-```powershell
-npm run build
+```text
+http://localhost:4200
 ```
 
-Los archivos de salida quedarán en `frontend/dist/`.
+---
 
-**Pruebas**
-- Backend: ejecutar tests con Maven: `.\mvnw.cmd test`.
-- Frontend: `npm test`.
+## **Credenciales de Prueba**
 
-**Desarrollo y debugging**
-- Asegúrese de que backend y frontend no usen puertos en conflicto (8080 y 4200 por defecto).
-- Si necesita habilitar CORS o cambiar el `application.properties`, edite `backend/src/main/resources/application.properties`.
+Para probar el sistema puede utilizar el siguiente usuario:
 
-**Contactos y colaboradores**
-- Equipo 07
+**RUT**
 
-**Crear base de datos**
-- Crear base de datos: test
-- Insertar los siguientes datos en la BD:
-- INSERT INTO edificio (direccion, nombre_edificio) VALUES ('Campus Central', 'Biblioteca Central');
+```text
+11.111.111-1
+```
 
-INSERT INTO sala (capacidad, codigo_sala, descripcion, estado, nombre_sala, piso, id_edificio) VALUES (6, 'A101', 'Sala de estudio grupal', 'Disponible', 'Sala A101', 1, 1), (10, 'B202', 'Sala multimedia', 'Disponible', 'Sala B202', 2, 1), (4, 'C303', 'Sala individual', 'Disponible', 'Sala C303', 3, 1), (8, 'D404', 'Sala de estudio grupal', 'Disponible', 'Sala D404', 4, 1), (8, 'E505', 'Sala de estudio grupal', 'Disponible', 'Sala E505', 5, 1), (14, 'F606', 'Sala de estudio grupal', 'Disponible', 'Sala F606', 6, 1);
+**Contraseña**
 
-Si quiere que añada pasos de despliegue, Docker, o instrucciones para cambiar la DB a H2 automáticamente, dímelo y lo añado.
+```text
+1234
+```
+
+---
