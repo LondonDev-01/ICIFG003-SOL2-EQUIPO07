@@ -16,4 +16,16 @@ export class SalaService {
   obtenerSalas(): Observable<Sala[]> {
     return this.http.get<Sala[]>(this.apiUrl);
   }
+
+  obtenerHorarios() {
+    return this.http.get<any[]>(
+      'http://localhost:8080/api/horarios'
+    );
+  }
+
+  obtenerReservas() {
+    return this.http.get<any[]>(
+      'http://localhost:8080/api/reservas'
+    );
+  }
 }

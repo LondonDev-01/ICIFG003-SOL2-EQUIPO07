@@ -5,14 +5,25 @@
   <div class="sala-card-content">
     <h3>{{ nombre }}</h3>
 
-    <p>Capacidad: {{ capacidad }} personas</p>
+    <p>
+      <i class="bi bi-people-fill"></i>
+      <strong>Capacidad:</strong>
+      {{ capacidad }} personas
+    </p>
 
-    <p>Edificio/Ubicación: {{ ubicacion }}</p>
+    <p>
+      <i class="bi bi-geo-alt-fill"></i>
+      <strong>Ubicación:</strong>
+      {{ ubicacion }}
+    </p>
 
-    <p>Horario: {{ horario }}</p>
+    <p>
+      <i class="bi bi-clock-fill"></i>
+      <strong>Horario:</strong>
+      {{ horario }}
+    </p>
 
     <div class="acciones">
-      <button class="btn-reservas" (click)="onVerReservas()">Ver reservas</button>
       <button class="btn-reservar" (click)="onReservar()">Reservar</button>
     </div>
   </div>

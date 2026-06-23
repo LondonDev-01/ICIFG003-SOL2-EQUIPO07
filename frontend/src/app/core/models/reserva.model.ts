@@ -11,4 +11,5 @@ export interface Reserva {
   bloqueHorario?: string;
   idEstado: number;
   nombreEstado: string;
+  horaTermino?: string;
 }

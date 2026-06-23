@@ -1,23 +1,50 @@
 .login-container {
   max-width: 1200px;
-  margin: 7rem auto 2rem auto;
+  margin: 5rem auto 1rem auto;
   background: #fff;
   border-radius: 18px;
   overflow: hidden;
   display: grid;
   grid-template-columns: 1fr 1fr;
   box-shadow: 0 4px 18px rgba(0, 0, 0, 0.08);
+  position:relative;
+  top:11px;
+
+  
 }
 
 .login-info {
-  padding: 4rem;
+  padding: 5rem;
   background: #fafafa;
   display: flex;
   flex-direction: column;
   justify-content: center;
   position: relative;
-  padding-top: 2rem;
-  padding-bottom: 2rem;
+  padding-top: 1rem;
+  padding-bottom: 22rem;
+  
+  position: relative;
+  overflow: hidden;
+
+  background-image: url('/login-bg.png');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.login-info::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+
+  background:rgba(120, 135, 163, 0.288);
+
+  z-index: 1;
+}
+
+.login-info > * {
+  position: relative;
+  z-index: 2;
 }
 
 .login-info h1 {
@@ -26,6 +53,9 @@
   line-height: 1.15;
   margin-bottom: 1rem;
   font-weight: 700;
+  margin-left:150px;
+  position:relative;
+  top:-25px;
 }
 
 .line {
@@ -40,34 +70,50 @@
   font-size: 1.35rem;
   color: #374151;
   margin-bottom: 2rem;
+  position: relative;
+  top: -80px;
+  margin-left:150px;
 }
 
 .info-box {
-  background: #eef4ff;
+  background: #012b5e;
   border-radius: 12px;
   padding: 1rem 1.2rem;
   display: flex;
   align-items: center;
   gap: 12px;
-  margin-bottom: 2rem;
+  margin-bottom: 4rem;
+  position:relative;
+  top:400px;
+  color: #f9fcff;
 }
 
-.login-image {
-  width: 100%;
-  max-height: 420px;
-  object-fit: cover;
-  border-radius: 14px;
+.login-logo {
+  text-align: center;
+  margin-bottom: 30px;
 }
 
+.login-logo img {
+  width: 200px;
+  height: auto;
+  filter: brightness(0) saturate(100%) invert(17%) sepia(40%) saturate(2576%) hue-rotate(204deg) brightness(91%) contrast(102%);
+  position:relative;
+  top: -77px;
+}
+
+/* info del contenedor derecho */
 .login-form-panel {
   padding: 4rem;
   display: flex;
   flex-direction: column;
   justify-content: center;
+  position:relative;
+  top:15px;
 }
 
 .login-form-panel form {
   width: 100%;
+  padding-top: 103px;
 }
 
 .form-group {
@@ -110,8 +156,19 @@
 }
 
 .btn-submit:disabled {
-  background: #93c5fd;
+  background: #bbcbe4ad;
   cursor: not-allowed;
+}
+
+.login-subtitle{
+  text-align:center;
+  color:#090a0c;
+  font-size:1.09rem;
+  margin-top:-40px;
+  margin-bottom:25px;
+  line-height:1.5;
+  position:relative;
+  top:-55px;
 }
 
 .separator {

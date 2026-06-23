@@ -16,7 +16,7 @@ public interface ReservaMapper {
 
     @Mappings({
             @Mapping(source = "estudiante.id", target = "idEstudiante"),
-            @Mapping(source = "estudiante.nombre", target = "nombreEstudiante"),
+            @Mapping(target = "nombreEstudiante",expression = "java(reserva.getEstudiante().getNombre() + \" \" + reserva.getEstudiante().getApellido())"),
             @Mapping(source = "sala.id", target = "idSala"),
             @Mapping(source = "sala.nombreSala", target = "nombreSala"),
             @Mapping(source = "horario.id", target = "idHorario"),

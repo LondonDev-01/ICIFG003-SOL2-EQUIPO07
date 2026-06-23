@@ -53,19 +53,20 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
-                        // Auth: público
-                        .requestMatchers("/api/auth/**").permitAll()
-                        // GETs: públicos
-                        .requestMatchers(HttpMethod.GET, "/api/**").permitAll()
-                        // Mis reservas: autenticado
-                        .requestMatchers("/api/mis-reservas").authenticated()
-                        // Escrituras: autenticado
-                        .requestMatchers(HttpMethod.POST, "/api/**").authenticated()
-                        .requestMatchers(HttpMethod.PUT, "/api/**").authenticated()
-                        .requestMatchers(HttpMethod.DELETE, "/api/**").authenticated()
-                        // Resto: público por defecto
-                        .anyRequest().permitAll()
-                )
+
+                	    .requestMatchers("/api/auth/**").permitAll()
+
+                	    // ESTA DEBE IR ANTES
+                	    .requestMatchers("/api/reservas/mis-reservas").authenticated()
+
+                	    .requestMatchers(HttpMethod.GET, "/api/**").permitAll()
+
+                	    .requestMatchers(HttpMethod.POST, "/api/**").authenticated()
+                	    .requestMatchers(HttpMethod.PUT, "/api/**").authenticated()
+                	    .requestMatchers(HttpMethod.DELETE, "/api/**").authenticated()
+
+                	    .anyRequest().permitAll()
+                	)
                 .addFilterBefore(rateLimitFilter, UsernamePasswordAuthenticationFilter.class)
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 

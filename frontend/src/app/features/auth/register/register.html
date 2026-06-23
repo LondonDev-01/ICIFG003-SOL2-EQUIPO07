@@ -6,7 +6,12 @@
     <div class="form-row">
       <div class="form-group">
         <label>RUT</label>
-        <input type="text" formControlName="rut" placeholder="12.345.678-9">
+        <input type="text" 
+               formControlName="rut" 
+               placeholder="12.345.678-9"
+               maxlength="12"
+               (input)="formatearRut($event)">
+               
         <div class="error" *ngIf="form.get('rut')?.invalid && form.get('rut')?.touched">
           El RUT es obligatorio
         </div>

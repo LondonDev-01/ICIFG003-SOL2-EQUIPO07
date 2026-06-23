@@ -36,6 +36,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
             throws ServletException, IOException {
+    	
+    	System.out.println("=== JWT FILTER ===");
 
         String header = request.getHeader(HEADER);
         if (header == null || !header.startsWith(PREFIX)) {

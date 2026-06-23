@@ -81,7 +81,7 @@
         <tr>
           <th>Inicio</th>
           <th>Fin</th>
-          <th>Reserva</th>
+          <th>Reservado por</th>
           <th>Estado</th>
         </tr>
       </thead>
@@ -231,17 +231,15 @@
       </div>
 
       <p class="info-jwt">
-        <i>
-          Tu identidad se obtendrá automáticamente desde tu sesión.
-        </i>
-      </p>
+  <i class="fas fa-circle-info"></i>
+  Tu reserva quedará asociada automáticamente a tu cuenta.
+</p>
 
-      <div
-        class="success-msg"
-        *ngIf="exito()">
-
-        ¡Reserva creada con éxito! Redirigiendo...
-
+      <div *ngIf="exito()" class="mensaje-exito">
+        ✅
+        {{ isEditMode
+            ? '¡Reserva actualizada con éxito! Redirigiendo...'
+            : '¡Reserva creada con éxito! Redirigiendo...' }}
       </div>
 
       <div
@@ -257,7 +255,7 @@
         class="btn-submit"
         [disabled]="cargando() || reservaForm.invalid">
 
-        {{ cargando() ? 'Enviando...' : 'Confirmar Reserva' }}
+        {{ isEditMode ? 'Editar Reserva' : 'Confirmar Reserva' }}
 
       </button>
 

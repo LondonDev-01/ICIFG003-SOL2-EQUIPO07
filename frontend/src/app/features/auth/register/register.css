@@ -1,15 +1,17 @@
 .auth-card {
   max-width: 420px;
-  margin: 4rem auto;
+  margin: 3rem auto;
   padding: 2.5rem;
   background: #fff;
   border-radius: 12px;
   box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+  position:relative;
+  top:41px;
 }
 
 .auth-card h2 {
   margin: 0 0 0.5rem;
-  color: #1a1a1a;
+  color: #012b5e;
   font-size: 1.75rem;
 }
 
@@ -63,7 +65,7 @@
 .btn-submit {
   width: 100%;
   padding: 0.75rem;
-  background: #2563eb;
+  background: #003b99;
   color: white;
   border: none;
   border-radius: 6px;
@@ -74,7 +76,7 @@
 }
 
 .btn-submit:disabled {
-  background: #93c5fd;
+  background: #304a682c;
   cursor: not-allowed;
 }
 

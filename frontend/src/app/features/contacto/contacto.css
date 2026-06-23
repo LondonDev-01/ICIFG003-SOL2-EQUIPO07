@@ -1,6 +1,6 @@
 .contacto-container {
   width: 100%;
-  padding: 40px 20px;
+  padding: 60px 20px;
   background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
   min-height: calc(100vh - 64px - 300px);
 }

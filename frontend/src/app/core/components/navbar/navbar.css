@@ -79,6 +79,70 @@
   padding-bottom: 5px;
 }
 
+.user-menu {
+  position: relative;
+  padding-right: 15px;
+}
+
+.user-greeting {
+  cursor: pointer;
+  color: white;
+  font-weight: 500;
+  margin-left: 10px;
+  margin-right: 0px;
+  
+
+}
+
+.dropdown-menu {
+  position: absolute;
+  top: 35px;
+  right: 0;
+  background: white;
+  min-width: 160px;
+  border-radius: 6px;
+  box-shadow: 0 4px 12px rgba(0,0,0,.15);
+  z-index: 1000;
+}
+
+.dropdown-item {
+  width: 100%;
+  border: none;
+  background: white;
+  padding: 12px;
+  text-align: left;
+  cursor: pointer;
+}
+
+.dropdown-item:hover {
+  background: #f3f4f6;
+}
+
+.nav-auth {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-right: 70px;
+}
+
+.btn-auth {
+  color: white;
+  text-decoration: none;
+  padding: 8px 14px;
+  border-radius: 6px;
+  transition: 0.3s;
+  border: 1px solid white;
+}
+
+.btn-auth:hover {
+  background: rgba(255,255,255,0.15);
+}
+
+.btn-register {
+  border: 1px solid rgb(133, 147, 165);
+  border: 1px solid #012b5e;
+}
+
 /* Responsive Design */
 @media (max-width: 1024px) {
   .navbar {

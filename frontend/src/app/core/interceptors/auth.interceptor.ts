@@ -10,6 +10,9 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
   const router = inject(Router);
   const token = authService.getToken();
 
+  console.log('TOKEN:', token);
+  console.log('URL:', req.url);
+
   // No agregar Authorization en endpoints públicos de auth
   const isAuthEndpoint = req.url.includes('/api/auth/');
   const authReq = token && !isAuthEndpoint

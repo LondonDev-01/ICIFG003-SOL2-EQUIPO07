@@ -27,6 +27,11 @@ export class Salas implements OnInit {
   capacidadSeleccionada: string = '';
   fechaSeleccionada: string = new Date().toISOString().split('T')[0];
   ordenSeleccionado: string = 'nombre';
+  popupVisible = false;
+  salaPopup: any = null;
+  horariosPopup: any[] = [];
+  todosHorarios: any[] = [];
+  todasReservas: any[] = [];
 
   constructor(
     private salaService: SalaService,

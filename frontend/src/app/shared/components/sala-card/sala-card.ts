@@ -19,13 +19,7 @@ export class SalaCard {
 
   @Input() imagen = '';
 
-  @Output() verReservas = new EventEmitter<void>();
-
   @Output() reservar = new EventEmitter<void>();
-
-  onVerReservas() {
-    this.verReservas.emit();
-  }
 
   onReservar() {
     this.reservar.emit();

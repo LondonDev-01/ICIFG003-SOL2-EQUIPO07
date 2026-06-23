@@ -24,9 +24,33 @@
       <a routerLink="/login" class="btn-auth">Iniciar sesión</a>
       <a routerLink="/register" class="btn-auth btn-register">Registrarse</a>
     </ng-container>
+    
     <ng-container *ngIf="isAuthenticated()">
-      <span class="user-greeting">Hola, {{ currentUser()?.nombre }}</span>
-      <button (click)="logout()" class="btn-logout">Salir</button>
+      <div class="user-menu">
+
+        <span
+          class="user-greeting"
+          (click)="toggleMenu()">
+
+          Hola, {{ currentUser()?.nombre }} ▼
+
+        </span>
+
+        <div
+          class="dropdown-menu"
+          *ngIf="mostrarMenu">
+
+          <button
+            (click)="logout()"
+            class="dropdown-item">
+
+            Cerrar sesión
+
+          </button>
+
+        </div>
+
+      </div>
     </ng-container>
   </div>
 </nav>

@@ -1,6 +1,7 @@
 .page-header{
     max-width:1200px;
     margin:5.7rem auto 1.5rem auto;
+    margin-left: 19rem;
 }
 
 .page-header h1{
@@ -313,6 +314,41 @@ input[readonly]{
     font-weight:600;
     color:#374151;
     cursor:not-allowed;
+}
+
+/* CSS MENSAJE AL CREAR RESERVA O EDITAR */
+.mensaje-exito {
+    display: block;
+
+    background: #d1fae5;
+
+    color: #065f46;
+
+    padding: 5px;
+
+    border-radius: 8px;
+
+    border-left: 5px solid #10b981;
+
+    margin-top: 15px;
+    margin-bottom: 15px;
+
+    font-weight: 600;
+
+    text-align: center;
+    position:relative;
+    top:20px;
+}
+
+@keyframes aparecer {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 /* RESPONSIVE */

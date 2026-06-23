@@ -42,7 +42,7 @@ export class Login implements OnInit {
     this.auth.login(this.form.value).subscribe({
       next: () => {
         this.cargando.set(false);
-        this.router.navigate(['/mis-reservas']);
+        this.router.navigate(['/salas']);
       },
       error: (err) => {
         this.cargando.set(false);
@@ -52,4 +52,32 @@ export class Login implements OnInit {
       }
     });
   }
+
+  formatearRut(event: Event): void {
+
+    const input = event.target as HTMLInputElement;
+
+    let valor = input.value.replace(/\./g, '');
+    valor = valor.replace(/-/g, '');
+
+    if (valor.length <= 1) {
+      input.value = valor;
+      this.form.get('rut')?.setValue(valor, { emitEvent: false });
+      return;
+    }
+
+    const dv = valor.slice(-1);
+    let cuerpo = valor.slice(0, -1);
+
+    cuerpo = cuerpo.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+
+    const rutFormateado = `${cuerpo}-${dv}`;
+
+    input.value = rutFormateado;
+
+    this.form.get('rut')?.setValue(rutFormateado, {
+      emitEvent: false
+    });
+  }
+
 }

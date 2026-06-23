@@ -2,11 +2,9 @@
   <header class="page-header">
     <div>
       <h1>Mis Reservas</h1>
-      <p *ngIf="currentUser()">Bienvenido, <strong>{{ currentUser()?.nombre }}</strong></p>
-    </div>
-    <div class="header-actions">
-      <a routerLink="/salas" class="btn-primary">Nueva reserva</a>
-      <button (click)="logout()" class="btn-logout">Cerrar sesión</button>
+      <p>
+        Aquí puedes revisar, editar o cancelar tus reservas.
+      </p>
     </div>
   </header>
 
@@ -29,6 +27,14 @@
         <span class="fecha">{{ r.fechaReserva | date:'dd/MM/yyyy' }}</span>
       </div>
       <h3>{{ r.nombreSala }}</h3>
+
+      <p class="horario">
+        <span class="horario-label">Horario:</span>
+        <span class="horario-valor">
+          {{ r.bloqueHorario }} - {{ r.horaTermino }}
+        </span>
+      </p>
+
       <p class="observacion">{{ r.observacion }}</p>
       <div class="reserva-footer">
         <small>Creada: {{ r.fechaCreacion | date:'dd/MM/yyyy HH:mm' }}</small>

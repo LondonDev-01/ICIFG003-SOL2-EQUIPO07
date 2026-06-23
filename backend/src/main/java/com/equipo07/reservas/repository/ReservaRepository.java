@@ -17,4 +17,17 @@ public interface ReservaRepository extends JpaRepository<Reserva, Integer> {
 
     boolean existsByEstudianteIdAndFechaReservaAndEstadoNombreEstado(
             Integer estudianteId, LocalDate fechaReserva, String nombreEstado);
+    
+    boolean existsByEstudianteIdAndFechaReservaAndEstadoNombreEstadoAndIdNot(
+            Integer estudianteId,
+            LocalDate fechaReserva,
+            String nombreEstado,
+            Integer id);
+
+    boolean existsBySalaIdAndHorarioIdAndFechaReservaAndEstadoNombreEstadoAndIdNot(
+            Integer salaId,
+            Integer horarioId,
+            LocalDate fechaReserva,
+            String nombreEstado,
+            Integer id);
 }

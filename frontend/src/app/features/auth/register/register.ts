@@ -30,7 +30,7 @@ export class Register implements OnInit {
   readonly error = signal<string | null>(null);
 
   readonly form: FormGroup = this.fb.group({
-    rut: ['', [Validators.required, Validators.maxLength(12)]],
+    rut: ['', [Validators.required, Validators.pattern(/^\d{1,2}\.\d{3}\.\d{3}-[\dkK]$/)]],
     nombre: ['', [Validators.required, Validators.maxLength(100)]],
     apellido: ['', [Validators.required, Validators.maxLength(100)]],
     correo: ['', [Validators.required, Validators.email]],
@@ -60,7 +60,7 @@ export class Register implements OnInit {
     this.auth.register(this.form.value).subscribe({
       next: () => {
         this.cargando.set(false);
-        this.router.navigate(['/mis-reservas']);
+        this.router.navigate(['/salas']);
       },
       error: (err) => {
         this.cargando.set(false);
@@ -69,5 +69,32 @@ export class Register implements OnInit {
         else this.error.set('Error al registrar usuario');
       }
     });
+  }
+
+  formatearRut(event: Event): void {
+
+    const input = event.target as HTMLInputElement;
+
+    let valor = input.value.replace(/\./g, '');
+    valor = valor.replace(/-/g, '');
+
+    if (valor.length <= 1) {
+      input.value = valor;
+      this.form.get('rut')?.setValue(valor);
+      this.form.get('rut')?.updateValueAndValidity();
+      return;
+    }
+
+    const dv = valor.slice(-1);
+    let cuerpo = valor.slice(0, -1);
+
+    cuerpo = cuerpo.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+
+    const rutFormateado = `${cuerpo}-${dv}`;
+
+    input.value = rutFormateado;
+
+    this.form.get('rut')?.setValue(rutFormateado);
+    this.form.get('rut')?.updateValueAndValidity();
   }
 }

@@ -47,3 +47,19 @@
     background: #0a3575;
     color: white;
 }
+
+.sala-card-content p{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    margin-bottom:10px;
+}
+
+.sala-card-content i{
+    color:#000000;
+    font-size:0.95rem;
+}
+
+.sala-card-content strong{
+    color:#000000;
+}

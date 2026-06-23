@@ -126,7 +126,6 @@ public class ReservaServiceImpl implements ReservaService {
 
         reserva.setFechaReserva(request.getFechaReserva());
         reserva.setObservacion(request.getObservacion());
-        reserva.setFechaCreacion(request.getFechaCreacion());
         reserva.setEstudiante(estudiante);
         reserva.setSala(sala);
         reserva.setHorario(horario);
@@ -168,40 +167,120 @@ public class ReservaServiceImpl implements ReservaService {
     }
 
     private void validarDisponibilidadEstudiante(Estudiante estudiante, ReservaRequestDTO request, Integer excludeReservaId) {
+    	System.out.println("ESTUDIANTE: " + estudiante.getId());
+    	System.out.println("FECHA: " + request.getFechaReserva());
+
+    	boolean existePendiente =
+    	        reservaRepository.existsByEstudianteIdAndFechaReservaAndEstadoNombreEstado(
+    	                estudiante.getId(),
+    	                request.getFechaReserva(),
+    	                ESTADO_RESERVA_PENDIENTE);
+
+    	boolean existeConfirmada =
+    	        reservaRepository.existsByEstudianteIdAndFechaReservaAndEstadoNombreEstado(
+    	                estudiante.getId(),
+    	                request.getFechaReserva(),
+    	                ESTADO_RESERVA_CONFIRMADA);
+
+    	System.out.println("PENDIENTE: " + existePendiente);
+    	System.out.println("CONFIRMADA: " + existeConfirmada);
+    	
+    	System.out.println("excludeReservaId = " + excludeReservaId);
+
+    	boolean existe = estudianteTieneReservaEnFecha(
+    	        estudiante.getId(),
+    	        request.getFechaReserva(),
+    	        excludeReservaId);
+
+    	System.out.println("EXISTE = " + existe);
         // Regla 2: el estudiante no puede tener otra reserva activa en la misma fecha
-        if (estudianteTieneReservaEnFecha(estudiante.getId(), request.getFechaReserva(), excludeReservaId)) {
-        	throw new IllegalStateException(
-        		    "Ya tienes una reserva activa para esta fecha. Solo puedes reservar una sala por día."
-        		);
-        }
+    	if (existe) {
+    	    throw new IllegalStateException(
+    	        "Ya tienes una reserva activa para esta fecha. Solo puedes reservar una sala por día."
+    	    );
+    	}
     }
 
-    private boolean salaHorarioFechaOcupados(Integer salaId, Integer horarioId, java.time.LocalDate fecha, Integer excludeReservaId) {
+    private boolean salaHorarioFechaOcupados(
+            Integer salaId,
+            Integer horarioId,
+            LocalDate fecha,
+            Integer excludeReservaId) {
+
         if (excludeReservaId == null) {
-            return reservaRepository.existsBySalaIdAndHorarioIdAndFechaReservaAndEstadoNombreEstado(
-                            salaId, horarioId, fecha, ESTADO_RESERVA_CONFIRMADA)
-                    || reservaRepository.existsBySalaIdAndHorarioIdAndFechaReservaAndEstadoNombreEstado(
-                            salaId, horarioId, fecha, ESTADO_RESERVA_PENDIENTE);
+
+            return reservaRepository
+                    .existsBySalaIdAndHorarioIdAndFechaReservaAndEstadoNombreEstado(
+                            salaId,
+                            horarioId,
+                            fecha,
+                            ESTADO_RESERVA_CONFIRMADA)
+
+                    ||
+
+                    reservaRepository
+                    .existsBySalaIdAndHorarioIdAndFechaReservaAndEstadoNombreEstado(
+                            salaId,
+                            horarioId,
+                            fecha,
+                            ESTADO_RESERVA_PENDIENTE);
         }
-        // Al actualizar, las validaciones de repository ya excluyen por idReserva solo si lo agregamos.
-        // Por simplicidad, si excludeReservaId != null, confiamos en que el id actual no es el mismo.
-        // (Mejora futura: agregar query que excluya por id.)
-        return reservaRepository.existsBySalaIdAndHorarioIdAndFechaReservaAndEstadoNombreEstado(
-                        salaId, horarioId, fecha, ESTADO_RESERVA_CONFIRMADA)
-                || reservaRepository.existsBySalaIdAndHorarioIdAndFechaReservaAndEstadoNombreEstado(
-                        salaId, horarioId, fecha, ESTADO_RESERVA_PENDIENTE);
+
+        return reservaRepository
+                .existsBySalaIdAndHorarioIdAndFechaReservaAndEstadoNombreEstadoAndIdNot(
+                        salaId,
+                        horarioId,
+                        fecha,
+                        ESTADO_RESERVA_CONFIRMADA,
+                        excludeReservaId)
+
+                ||
+
+                reservaRepository
+                .existsBySalaIdAndHorarioIdAndFechaReservaAndEstadoNombreEstadoAndIdNot(
+                        salaId,
+                        horarioId,
+                        fecha,
+                        ESTADO_RESERVA_PENDIENTE,
+                        excludeReservaId);
     }
 
-    private boolean estudianteTieneReservaEnFecha(Integer estudianteId, java.time.LocalDate fecha, Integer excludeReservaId) {
+    private boolean estudianteTieneReservaEnFecha(
+            Integer estudianteId,
+            LocalDate fecha,
+            Integer excludeReservaId) {
+
         if (excludeReservaId == null) {
-            return reservaRepository.existsByEstudianteIdAndFechaReservaAndEstadoNombreEstado(
-                            estudianteId, fecha, ESTADO_RESERVA_CONFIRMADA)
-                    || reservaRepository.existsByEstudianteIdAndFechaReservaAndEstadoNombreEstado(
-                            estudianteId, fecha, ESTADO_RESERVA_PENDIENTE);
+
+            return reservaRepository
+                    .existsByEstudianteIdAndFechaReservaAndEstadoNombreEstado(
+                            estudianteId,
+                            fecha,
+                            ESTADO_RESERVA_CONFIRMADA)
+
+                    ||
+
+                    reservaRepository
+                    .existsByEstudianteIdAndFechaReservaAndEstadoNombreEstado(
+                            estudianteId,
+                            fecha,
+                            ESTADO_RESERVA_PENDIENTE);
         }
-        return reservaRepository.existsByEstudianteIdAndFechaReservaAndEstadoNombreEstado(
-                        estudianteId, fecha, ESTADO_RESERVA_CONFIRMADA)
-                || reservaRepository.existsByEstudianteIdAndFechaReservaAndEstadoNombreEstado(
-                        estudianteId, fecha, ESTADO_RESERVA_PENDIENTE);
+
+        return reservaRepository
+                .existsByEstudianteIdAndFechaReservaAndEstadoNombreEstadoAndIdNot(
+                        estudianteId,
+                        fecha,
+                        ESTADO_RESERVA_CONFIRMADA,
+                        excludeReservaId)
+
+                ||
+
+                reservaRepository
+                .existsByEstudianteIdAndFechaReservaAndEstadoNombreEstadoAndIdNot(
+                        estudianteId,
+                        fecha,
+                        ESTADO_RESERVA_PENDIENTE,
+                        excludeReservaId);
     }
 }

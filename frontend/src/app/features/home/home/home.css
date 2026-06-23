@@ -63,6 +63,8 @@
 
     padding: 0;
     text-align: left;
+    position:relative;
+    top:15px;
 }
 
 .hero-content h1 {
@@ -463,10 +465,15 @@
 
     .avisos-section {
         grid-column: 1;
+        width:100%;
+        margin-left:0;
+        transform:none;
     }
 
     .salas-section {
         grid-column: 1;
+        margin-left:0;
+        transform:none;
     }
 
     .avisos-card {
@@ -484,6 +491,8 @@
 
     .salas-grid {
         grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+        flex-wrap:wrap;
+        justify-content:center;
     }
 }
 
@@ -504,7 +513,7 @@
 
     .hero-content p {
         font-size: 15px;
-        margin-bottom: 20px;
+        margin-bottom: 14px;
     }
 
     .btn-primary {
@@ -537,6 +546,11 @@
 
     .sala-image {
         height: 180px;
+    }
+
+    .nav-links {
+        gap: 12px;
+        font-size: 11px;
     }
 }
 
@@ -665,4 +679,38 @@
 
     text-decoration: none;
     display: inline-block;
+}
+
+/* ajustes responsive*/
+@media (max-width: 768px){
+
+    .avisos-section{
+        width:100%;
+        margin-left:0;
+    }
+
+    .avisos-card{
+        width:100%;
+        margin-left:0;
+        transform:none;
+    }
+
+    .salas-section{
+        margin-left:0;
+        transform:none;
+    }
+
+    .salas-grid{
+        flex-direction:column;
+        align-items:center;
+    }
+
+    .sala-card{
+        width:100%;
+        max-width:400px;
+    }
+
+    .hero-content{
+        margin-left:30px;
+    }
 }
