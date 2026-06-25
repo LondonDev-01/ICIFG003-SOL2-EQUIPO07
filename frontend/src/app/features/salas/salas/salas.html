@@ -4,64 +4,91 @@
     <p>Encuentra y reserva la sala que mejor se adapte a tus necesidades.</p>
 
     <div class="barra-superior">
-      <div class="busqueda-card">
-        <div class="buscar">
-          <label for="buscarSala">Buscar sala</label>
+
+       <div class="filtro-item buscar">
+
+          <label>Buscar</label>
+
           <input
-            id="buscarSala"
-            type="text"
-            placeholder="Ej: Sala A101"
-            [(ngModel)]="textoBusqueda"
-            (input)="filtrarSalas()">
-        </div>
+              type="text"
+              placeholder="Ej: Sala A101"
+              [(ngModel)]="textoBusqueda"
+              (input)="filtrarSalas()">
+
       </div>
 
-      <div class="filtros-card">
-        <div class="filtros">
-          <div class="titulo-filtros">
-            <h3>Filtros</h3>
-          </div>
+      <div class="filtro-item">
 
-          <div class="categoria">
-            <label for="categoriaSala">Capacidad</label>
-            <select
-              id="categoriaSala"
-              [(ngModel)]="capacidadSeleccionada">
+          <label>Capacidad</label>
+
+          <select
+              [(ngModel)]="capacidadSeleccionada"
+              (change)="filtrarSalas()">
+
               <option value="">Todas</option>
               <option value="4">Hasta 4 personas</option>
               <option value="8">Hasta 8 personas</option>
               <option value="9">Más de 8 personas</option>
-            </select>
-          </div>
 
-          <div class="fecha">
-            <label for="fechaSala">Fecha (día de consulta)</label>
-            <input
+          </select>
+
+      </div>
+
+      <div class="filtro-item">
+
+          <label>Fecha</label>
+
+          <input
               type="date"
               id="fechaSala"
-              [(ngModel)]="fechaSeleccionada">
-          </div>
+              [(ngModel)]="fechaSeleccionada"
+              [min]="fechaMinima"
+              (change)="filtrarSalas()">
 
-          <div class="ordenar">
-            <label for="ordenarSala">Ordenar por</label>
-            <select
-              id="ordenarSala"
-              [(ngModel)]="ordenSeleccionado">
+      </div>
+
+      <div class="filtro-item">
+
+          <label>Ordenar por</label>
+
+          <select
+              [(ngModel)]="ordenSeleccionado"
+              (change)="filtrarSalas()">
+
               <option value="nombre">Nombre (A-Z)</option>
               <option value="capacidad">Capacidad</option>
-            </select>
-          </div>
 
-          <div class="btn-buscar">
-            <button (click)="filtrarSalas()">
-              <i class="bi bi-search"></i> Buscar
-            </button>
-          </div>
-        </div>
+          </select>
+
       </div>
+      
     </div>
 
-    <div class="salas-grid">
+    <div class="contador-salas">
+      {{ salasFiltradas.length }}
+      {{ salasFiltradas.length === 1 ? 'sala disponible' : 'salas disponibles' }}
+    </div>
+
+    <div class="resumen-filtros">
+
+      <i class="bi bi-funnel-fill"></i>
+
+      Mostrando
+      <strong>{{ salasFiltradas.length }}</strong>
+
+      {{ salasFiltradas.length === 1 ? 'sala' : 'salas' }}
+
+      •
+
+      {{ obtenerTextoCapacidad() }}
+
+      •
+
+      {{ fechaSeleccionada | date:'dd/MM/yyyy' }}
+
+    </div>
+
+    <div class="salas-grid" *ngIf="salasFiltradas.length > 0">
       <app-sala-card
         *ngFor="let sala of salasFiltradas"
         [nombre]="sala.nombreSala"
@@ -72,6 +99,13 @@
         (reservar)="irAReservar(sala.id)">
       </app-sala-card>
     </div>
+
+    <div class="sin-resultados" *ngIf="salasFiltradas.length === 0">
+      <i class="bi bi-search"></i>
+      <h3>No se encontraron salas</h3>
+      <p>Intenta modificar los filtros o la búsqueda.</p>
+    </div>
+
   </section>
 </div>
 

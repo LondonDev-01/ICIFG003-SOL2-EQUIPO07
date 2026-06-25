@@ -159,7 +159,7 @@ INSERT INTO RESERVA (id, fecha_reserva, observacion, fecha_creacion, id_estudian
 (20,'2026-06-30','Preparacion examen','2026-06-28 10:05:00',7,1,3,2),
 (21,'2026-06-30','Investigacion','2026-06-28 10:10:00',8,1,5,1),
 
-(22,'2026-07-01','Trabajo de proyecto','2026-06-29 10:00:00',9,1,2,1),
+(22,'2026-07-01','Trabajo git remote -vde proyecto','2026-06-29 10:00:00',9,1,2,1),
 (23,'2026-07-01','Reunion equipo','2026-06-29 10:05:00',10,1,4,2),
 (24,'2026-07-01','Estudio grupal','2026-06-29 10:10:00',11,1,7,1),
 

@@ -61,29 +61,7 @@
     cursor: pointer;
 }
 
-.filtros {
-    display: flex;
-    align-items: flex-start;
-    gap: 40px;
-}
 
-
-
-.buscar {
-    width: 50%;
-    flex: 1;
-    margin-top: 1px;
-}
-
-.buscar input {
-    width: 180%;
-
-    padding: 12px;
-
-    border: 1px solid #ddd;
-
-    border-radius: 8px;
-}
 
 .categoria select,
 .ordenar select {
@@ -118,23 +96,13 @@
 
 .buscar label{
     display:block;
-
     color:#0a3575;
-
     font-size:18px;
     font-weight:bold;
-
     margin-bottom:15px;
-}
-
-.categoria,
-.fecha,
-.ordenar {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 8px;
-    margin-top: 20px;
+    position: relative;
+    top: 15px;
+    
 }
 
 .fecha input {
@@ -153,83 +121,125 @@
     margin: 0;
 }
 
-.btn-buscar button{
-    background: #0a3575;
-    color: white;
-
-    border: none;
-    border-radius: 8px;
-
-    padding: 12px 25px;
-
-    cursor: pointer;
-    margin-top: 45px;
-}
-
 .barra-superior{
     display:flex;
-    gap:20px;
+    align-items:flex-end;
+    gap:30px;
+    background:white;
+    padding:25px;
+    border-radius:12px;
+    box-shadow:0 2px 8px rgba(0,0,0,.08);
     margin-bottom:30px;
+    flex-wrap:wrap;
 }
 
-.busqueda-card{
-    width:25%;
-
-    background:white;
-
-    padding:20px;
-
-    border-radius:12px;
-
-    box-shadow: 0 2px 8px rgba(247, 31, 31, 0.08);
+.buscar{
+    flex:0;
+    min-width:300px;
 }
 
-.filtros-card{
-    flex:1;
-
-    background:white;
-
-    padding:20px;
-
-    border-radius:12px;
-
-    box-shadow: 0 2px 8px rgba(179, 37, 37, 0.13);
+.filtro-item input,
+.filtro-item select{
+    height:44px;
+    padding:0 14px;
+    border:1px solid #dcdcdc;
+    border-radius:8px;
+    font-size:15px;
 }
 
-/* notificacion info salas */
-.popup-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-
-  width: 100%;
-  height: 100%;
-
-  background: rgba(0,0,0,0.5);
-
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
-  z-index: 9999;
+.filtro-item{
+    display:flex;
+    flex-direction:column;
+    gap:8px;
 }
 
-.popup {
-  background: white;
-
-  padding: 25px;
-
-  border-radius: 12px;
-
-  min-width: 450px;
-
-  box-shadow: 0 0 20px rgba(0,0,0,0.3);
+.filtro-item label{
+    color:#0a3575;
+    font-weight:bold;
+    font-size:15px;
 }
 
-.popup button {
-  margin-top: 15px;
+
+
+/* cuando no hay filtro aparecera mensaje*/
+.sin-resultados{
+
+    margin-top:60px;
+
+    text-align:center;
+
+    padding:50px 20px;
+
+    color:#6b7280;
 }
 
+.sin-resultados i{
+
+    font-size:55px;
+
+    color:#0a3575;
+
+    margin-bottom:15px;
+
+    display:block;
+}
+
+.sin-resultados h3{
+
+    color:#0a3575;
+
+    margin-bottom:10px;
+
+    font-size:28px;
+}
+
+.sin-resultados p{
+
+    font-size:16px;
+
+    color:#666;
+}
+
+/* mensaje contador de salas disponibles */
+.contador-salas{
+
+    margin-bottom:20px;
+
+    color:#0a3575;
+
+    font-size:18px;
+
+    font-weight:600;
+}
+
+.resumen-filtros{
+
+    margin-bottom:25px;
+
+    padding:12px 18px;
+
+    background:#eef4ff;
+
+    border-left:4px solid #0a3575;
+
+    border-radius:8px;
+
+    color:#374151;
+
+    font-size:16px;
+}
+
+.resumen-filtros i{
+
+    color:#0a3575;
+
+    margin-right:8px;
+}
+
+.resumen-filtros strong{
+
+    color:#0a3575;
+}
 
 
 /* =========================
