@@ -13,6 +13,7 @@ import com.equipo07.reservas.repository.EstudianteRepository;
 import com.equipo07.reservas.security.JwtService;
 import com.equipo07.reservas.security.RateLimitFilter;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,6 +22,7 @@ import java.time.LocalDate;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class AuthServiceImpl implements AuthService {
 
     private final EstudianteRepository estudianteRepository;
@@ -33,6 +35,8 @@ public class AuthServiceImpl implements AuthService {
     @Transactional
     public AuthResponseDTO register(RegisterRequestDTO request) {
         String rutNormalizado = normalizeRut(request.getRut());
+
+        log.info("Intento de registro para rut={} y correo={}", rutNormalizado, request.getCorreo());
 
         if (estudianteRepository.findByRut(rutNormalizado).isPresent()
                 || estudianteRepository.findByRut(request.getRut()).isPresent()) {
@@ -56,6 +60,7 @@ public class AuthServiceImpl implements AuthService {
         estudiante.setPassword(passwordEncoder.encode(request.getPassword()));
 
         Estudiante saved = estudianteRepository.save(estudiante);
+        log.info("Estudiante registrado correctamente con id={} y rut={}", saved.getId(), saved.getRut());
         return buildResponse(saved);
     }
 
@@ -64,16 +69,20 @@ public class AuthServiceImpl implements AuthService {
     public AuthResponseDTO login(LoginRequestDTO request, String ip) {
         String rutNormalizado = normalizeRut(request.getRut());
 
+        log.info("Intento de login para rut={} desde ip={}", rutNormalizado, ip);
+
         Estudiante estudiante = estudianteRepository.findByRut(rutNormalizado)
                 .or(() -> estudianteRepository.findByRut(request.getRut()))
                 .orElse(null);
 
         if (estudiante == null || !passwordEncoder.matches(request.getPassword(), estudiante.getPassword())) {
             rateLimitFilter.registerFailedAttempt(ip);
+            log.warn("Login fallido para rut={} desde ip={}", rutNormalizado, ip);
             throw new AuthException("Credenciales inválidas");
         }
 
         rateLimitFilter.registerSuccessfulAttempt(ip);
+        log.info("Login exitoso para estudiante id={} rut={}", estudiante.getId(), estudiante.getRut());
         return buildResponse(estudiante);
     }
 

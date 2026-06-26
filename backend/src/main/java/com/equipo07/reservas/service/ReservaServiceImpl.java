@@ -17,6 +17,7 @@ import com.equipo07.reservas.repository.HorarioDisponibleRepository;
 import com.equipo07.reservas.repository.ReservaRepository;
 import com.equipo07.reservas.repository.SalaRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,6 +27,7 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class ReservaServiceImpl implements ReservaService {
 
     private static final int OBSERVACION_MIN_LENGTH = 15;
@@ -84,6 +86,8 @@ public class ReservaServiceImpl implements ReservaService {
         validarDisponibilidadSala(sala, horario, request, null);
         validarDisponibilidadEstudiante(estudiante, request, null);
 
+        log.info("Creando reserva para estudiante {} en sala {} y horario {}", estudiante.getId(), sala.getId(), horario.getId());
+
         Reserva reserva = reservaMapper.toEntity(request);
         // El mapper ya setea el FK del Estudiante; nos aseguramos de reescribirlo con el del JWT
         reserva.setEstudiante(estudiante);
@@ -123,6 +127,8 @@ public class ReservaServiceImpl implements ReservaService {
         // Excluir la reserva actual de las verificaciones para no auto-conflictuar
         validarDisponibilidadSala(sala, horario, request, id);
         validarDisponibilidadEstudiante(estudiante, request, id);
+
+        log.info("Actualizando reserva {} para estudiante {}", id, estudiante.getId());
 
         reserva.setFechaReserva(request.getFechaReserva());
         reserva.setObservacion(request.getObservacion());
@@ -167,8 +173,7 @@ public class ReservaServiceImpl implements ReservaService {
     }
 
     private void validarDisponibilidadEstudiante(Estudiante estudiante, ReservaRequestDTO request, Integer excludeReservaId) {
-    	System.out.println("ESTUDIANTE: " + estudiante.getId());
-    	System.out.println("FECHA: " + request.getFechaReserva());
+            log.debug("Validando disponibilidad de estudiante {} para fecha {}", estudiante.getId(), request.getFechaReserva());
 
     	boolean existePendiente =
     	        reservaRepository.existsByEstudianteIdAndFechaReservaAndEstadoNombreEstado(
@@ -182,17 +187,15 @@ public class ReservaServiceImpl implements ReservaService {
     	                request.getFechaReserva(),
     	                ESTADO_RESERVA_CONFIRMADA);
 
-    	System.out.println("PENDIENTE: " + existePendiente);
-    	System.out.println("CONFIRMADA: " + existeConfirmada);
-    	
-    	System.out.println("excludeReservaId = " + excludeReservaId);
+            log.debug("Reservas activas del estudiante {} - pendiente={}, confirmada={}, excludeReservaId={}",
+                    estudiante.getId(), existePendiente, existeConfirmada, excludeReservaId);
 
     	boolean existe = estudianteTieneReservaEnFecha(
     	        estudiante.getId(),
     	        request.getFechaReserva(),
     	        excludeReservaId);
 
-    	System.out.println("EXISTE = " + existe);
+            log.debug("Existe reserva activa para estudiante {} en fecha {}: {}", estudiante.getId(), request.getFechaReserva(), existe);
         // Regla 2: el estudiante no puede tener otra reserva activa en la misma fecha
     	if (existe) {
     	    throw new IllegalStateException(

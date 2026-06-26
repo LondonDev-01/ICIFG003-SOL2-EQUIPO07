@@ -9,6 +9,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -25,6 +26,7 @@ import java.util.Optional;
  */
 @Component
 @RequiredArgsConstructor
+@Slf4j
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private static final String HEADER = "Authorization";
@@ -37,7 +39,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
             throws ServletException, IOException {
     	
-    	System.out.println("=== JWT FILTER ===");
+	    log.debug("Procesando filtro JWT para {} {}", request.getMethod(), request.getRequestURI());
 
         String header = request.getHeader(HEADER);
         if (header == null || !header.startsWith(PREFIX)) {
@@ -49,9 +51,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         try {
             Claims claims = jwtService.parse(token);
             String rut = claims.getSubject();
-            System.out.println("RUT JWT = " + rut);
+	    	log.debug("JWT válido para RUT {}", rut);
             Optional<Estudiante> estudianteOpt = estudianteRepository.findByRut(rut);
-            System.out.println("USUARIO ENCONTRADO = " + estudianteOpt.isPresent());
             if (estudianteOpt.isPresent() && SecurityContextHolder.getContext().getAuthentication() == null) {
                 Estudiante estudiante = estudianteOpt.get();
                 UserDetails userDetails = User.withUsername(rut)
@@ -61,11 +62,12 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 // Custom principal: el Estudiante completo, no solo el RUT
                 UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(
                         new EstudiantePrincipal(estudiante), null, userDetails.getAuthorities());
-                System.out.println("AUTENTICANDO USUARIO");
+	    		log.info("Usuario autenticado por JWT: rut={}", rut);
                 SecurityContextHolder.getContext().setAuthentication(auth);
             }
         } catch (JwtException ex) {
             // Token inválido o expirado, simplemente no autenticamos
+	    	log.warn("JWT inválido o expirado en {} {}: {}", request.getMethod(), request.getRequestURI(), ex.getMessage());
         }
 
         chain.doFilter(request, response);

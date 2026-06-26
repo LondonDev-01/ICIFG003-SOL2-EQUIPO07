@@ -9,6 +9,7 @@ import com.equipo07.reservas.repository.EstudianteRepository;
 import com.equipo07.reservas.repository.ReservaRepository;
 import com.equipo07.reservas.security.EstudiantePrincipal;
 import jakarta.validation.Valid;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -21,6 +22,7 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/api/reservas")
 @CrossOrigin(origins = "http://localhost:4200")
+@Slf4j
 public class ReservaController {
 
     private final ReservaService reservaService;
@@ -48,13 +50,11 @@ public class ReservaController {
     @GetMapping("/mis-reservas")
     public ResponseEntity<List<ReservaResponseDTO>> misReservas(@AuthenticationPrincipal EstudiantePrincipal principal) {
 
-        System.out.println("=== MIS RESERVAS ===");
-        System.out.println("PRINCIPAL: " + principal);
+    	    log.info("Consultando reservas del estudiante autenticado");
 
         Estudiante estudiante = principal.estudiante();
 
-        System.out.println("ESTUDIANTE: " + estudiante);
-        System.out.println("ID ESTUDIANTE: " + estudiante.getId());
+    	    log.debug("Estudiante autenticado: id={}, rut={}", estudiante.getId(), estudiante.getRut());
 
         List<ReservaResponseDTO> reservas = reservaRepository.findByEstudianteId(estudiante.getId())
                 .stream()
@@ -69,8 +69,7 @@ public class ReservaController {
             @Valid @RequestBody ReservaRequestDTO request,
             @AuthenticationPrincipal EstudiantePrincipal principal) {
 
-        System.out.println("ENTRO AL CONTROLLER");
-        System.out.println("PRINCIPAL = " + principal);
+    	    log.info("Solicitud para crear reserva recibida");
 
         Integer idEstudiante = principal != null
                 ? principal.estudiante().getId()
@@ -86,8 +85,7 @@ public class ReservaController {
             @Valid @RequestBody ReservaRequestDTO request,
             @AuthenticationPrincipal EstudiantePrincipal principal) {
 
-        System.out.println("EDITANDO RESERVA");
-        System.out.println("PRINCIPAL = " + principal);
+    	    log.info("Solicitud para actualizar reserva {} recibida", id);
 
         return ResponseEntity.ok(
                 reservaService.actualizar(id, request)
