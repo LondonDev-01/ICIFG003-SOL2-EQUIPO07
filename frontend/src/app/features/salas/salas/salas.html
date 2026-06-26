@@ -1,107 +1,76 @@
 <div class="salas-wrapper">
   <section class="salas-container">
-    
-    <header class="page-header">
-
-        <div>
-
-            <h1>Salas de Estudio</h1>
-
-            <p>
-                Encuentra y reserva la sala que mejor se adapte a tus necesidades.
-            </p>
-
-        </div>
-
-    </header>
+    <h1>Salas de Estudio</h1>
+    <p>Encuentra y reserva la sala que mejor se adapte a tus necesidades.</p>
 
     <div class="barra-superior">
-
-       <div class="filtro-item buscar">
-
-          <label>Buscar</label>
-
+      <div class="busqueda-card">
+        <div class="buscar">
+          <label for="buscarSala">Buscar sala</label>
           <input
-              type="text"
-              placeholder="Ej: Sala A101"
-              [(ngModel)]="textoBusqueda"
-              (input)="filtrarSalas()">
-
+            id="buscarSala"
+            type="text"
+            placeholder="Ej: Sala A101"
+            [(ngModel)]="textoBusqueda"
+            (input)="filtrarSalas()">
+        </div>
       </div>
 
-      <div class="filtro-item">
+      <div class="filtros-card">
+        <div class="filtros">
+          <div class="titulo-filtros">
+            <h3>Filtros</h3>
+          </div>
 
-          <label>Capacidad</label>
-
-          <select
-              [(ngModel)]="capacidadSeleccionada"
-              (change)="filtrarSalas()">
-
+          <div class="categoria">
+            <label for="categoriaSala">Capacidad</label>
+            <select
+              id="categoriaSala"
+              [(ngModel)]="capacidadSeleccionada">
               <option value="">Todas</option>
               <option value="4">Hasta 4 personas</option>
               <option value="8">Hasta 8 personas</option>
               <option value="9">Más de 8 personas</option>
+            </select>
+          </div>
 
-          </select>
-
-      </div>
-
-      <div class="filtro-item">
-
-          <label>Fecha</label>
-
-          <input
+          <div class="fecha">
+            <label for="fechaSala">Fecha (día de consulta)</label>
+            <input
               type="date"
               id="fechaSala"
-              [(ngModel)]="fechaSeleccionada"
-              [min]="fechaMinima"
-              (change)="filtrarSalas()">
+              [(ngModel)]="fechaSeleccionada">
+          </div>
 
-      </div>
-
-      <div class="filtro-item">
-
-          <label>Ordenar por</label>
-
-          <select
-              [(ngModel)]="ordenSeleccionado"
-              (change)="filtrarSalas()">
-
+          <div class="ordenar">
+            <label for="ordenarSala">Ordenar por</label>
+            <select
+              id="ordenarSala"
+              [(ngModel)]="ordenSeleccionado">
               <option value="nombre">Nombre (A-Z)</option>
               <option value="capacidad">Capacidad</option>
+            </select>
+          </div>
 
-          </select>
-
+          <div class="btn-buscar">
+            <button (click)="filtrarSalas()">
+              <i class="bi bi-search"></i> Buscar
+            </button>
+          </div>
+        </div>
       </div>
-      
     </div>
 
-    <div class="contador-salas">
-      {{ salasFiltradas.length }}
-      {{ salasFiltradas.length === 1 ? 'sala disponible' : 'salas disponibles' }}
+    <div *ngIf="error()" class="error-msg">
+      <i class="bi bi-exclamation-triangle-fill"></i>
+      {{ error() }}
     </div>
 
-    <div class="resumen-filtros">
-
-      <i class="bi bi-funnel-fill"></i>
-
-      Mostrando
-      <strong>{{ salasFiltradas.length }}</strong>
-
-
-      {{ salasFiltradas.length === 1 ? 'sala' : 'salas' }}
-
-      &nbsp;&nbsp;•&nbsp;&nbsp;
-
-      {{ obtenerTextoCapacidad() }}
-
-      &nbsp;&nbsp;•&nbsp;&nbsp;
-
-      {{ fechaSeleccionada | date:'dd/MM/yyyy' }}
-
+    <div *ngIf="cargando()" class="cargando-msg">
+      Cargando salas disponibles...
     </div>
 
-    <div class="salas-grid" *ngIf="salasFiltradas.length > 0">
+    <div class="salas-grid" *ngIf="!cargando() && !error()">
       <app-sala-card
         *ngFor="let sala of salasFiltradas"
         [nombre]="sala.nombreSala"
@@ -112,13 +81,6 @@
         (reservar)="irAReservar(sala.id)">
       </app-sala-card>
     </div>
-
-    <div class="sin-resultados" *ngIf="salasFiltradas.length === 0">
-      <i class="bi bi-search"></i>
-      <h3>No se encontraron salas</h3>
-      <p>Intenta modificar los filtros o la búsqueda.</p>
-    </div>
-
   </section>
 </div>
 

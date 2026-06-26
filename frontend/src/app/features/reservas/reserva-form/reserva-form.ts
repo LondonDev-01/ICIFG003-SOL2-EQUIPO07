@@ -33,8 +33,10 @@ export class ReservaForm implements OnInit {
   isEditMode = false;
   reservaId: number | null = null;
   salaSeleccionada: any = null;
+  /** Fecha de hoy en formato YYYY-MM-DD, usada como [min] del input de fecha
+   *  para que el selector nativo del navegador no permita elegir fechas pasadas. */
+  readonly fechaMinima = new Date().toISOString().split('T')[0];
   nombreUsuario = '';
-  fechaMinima = new Date().toISOString().split('T')[0];
 
   ngOnInit(): void {
 
@@ -91,7 +93,7 @@ export class ReservaForm implements OnInit {
 
   cargarReserva(): void {
     if (!this.reservaId) return;
-    this.http.get<any>(`/api/reservas/${this.reservaId}`).subscribe({
+    this.http.get<any>(`http://localhost:8080/api/reservas/${this.reservaId}`).subscribe({
       next: (reserva) => {
 
         const idS = reserva.idSala;
@@ -115,20 +117,44 @@ export class ReservaForm implements OnInit {
   }
 
   cargarCatalogos(): void {
-    this.http.get<any[]>('/api/carreras').subscribe((d) => this.carreras.set(d));
-    this.http.get<any[]>('/api/salas').subscribe((d) => {
-      this.salas.set(d);
-
-       const salaId= this.route.snapshot.queryParamMap.get('salaId');
-
-      if (salaId) {
-        this.salaSeleccionada = d.find(
-          s => s.id === Number(salaId)
-        );
-      }
+    this.http.get<any[]>('http://localhost:8080/api/carreras').subscribe({
+      next: (d) => this.carreras.set(d),
+      error: (err) => this.mostrarErrorDeCatalogo(err)
     });
-    this.http.get<any[]>('/api/horarios').subscribe((d) => this.horarios.set(d));
-    this.http.get<any[]>('/api/estados-reserva').subscribe((d) => this.estados.set(d));
+    this.http.get<any[]>('http://localhost:8080/api/salas').subscribe({
+      next: (d) => {
+        this.salas.set(d);
+
+        const salaId = this.route.snapshot.queryParamMap.get('salaId');
+
+        if (salaId) {
+          this.salaSeleccionada = d.find(
+            s => s.id === Number(salaId)
+          );
+        }
+      },
+      error: (err) => this.mostrarErrorDeCatalogo(err)
+    });
+    this.http.get<any[]>('http://localhost:8080/api/horarios').subscribe({
+      next: (d) => this.horarios.set(d),
+      error: (err) => this.mostrarErrorDeCatalogo(err)
+    });
+    this.http.get<any[]>('http://localhost:8080/api/estados-reserva').subscribe({
+      next: (d) => this.estados.set(d),
+      error: (err) => this.mostrarErrorDeCatalogo(err)
+    });
+  }
+
+  /**
+   * Las llamadas de cargarCatalogos() son independientes entre sí; si una
+   * falla (ej. backend caído) mostramos el mensaje amigable sin tapar uno
+   * que ya esté seteado por otra de las mismas llamadas.
+   */
+  private mostrarErrorDeCatalogo(err: any): void {
+    if (this.error()) return;
+    this.error.set(
+      err.error?.message || 'No pudimos cargar los datos del formulario. Intenta nuevamente más tarde.'
+    );
   }
 
   obtenerImagenSala(): string {
@@ -168,7 +194,7 @@ cargarReservas(): void {
 
   if (!salaId) return;
 
-  this.http.get<any[]>('/api/reservas')
+  this.http.get<any[]>('http://localhost:8080/api/reservas')
     .subscribe({
       next: (reservas) => {
 
@@ -187,7 +213,8 @@ cargarReservas(): void {
 
         this.horarios.set(horariosActualizados);
 
-      }
+      },
+      error: (err) => this.mostrarErrorDeCatalogo(err)
     });
 
 }
@@ -244,11 +271,11 @@ cargarReservas(): void {
     };
 
     if (this.isEditMode && this.reservaId) {
-      this.http.put(`/api/reservas/${this.reservaId}`, body).subscribe({
+      this.http.put(`http://localhost:8080/api/reservas/${this.reservaId}`, body).subscribe({
         next: () => {
           this.cargando.set(false);
-          alert('Reserva actualizada con éxito.');
-          this.router.navigate(['/mis-reservas']);
+          this.exito.set(true);
+          setTimeout(() => this.router.navigate(['/mis-reservas']), 1500);
         },
         error: (err) => {
 
@@ -268,23 +295,12 @@ cargarReservas(): void {
         }
       });
     } else {
-      this.http.post('/api/reservas', body).subscribe({
+      this.http.post('http://localhost:8080/api/reservas', body).subscribe({
         next: () => {
           this.cargando.set(false);
           this.exito.set(true);
-
-          setTimeout(() => {
-
-            this.router.navigate(
-              ['/mis-reservas'],
-              {
-                queryParams: {
-                  actualizado: 'true'
-                }
-              }
-            );
-
-          }, 1500);
+          this.reservaForm.reset();
+          setTimeout(() => this.router.navigate(['/mis-reservas']), 1500);
         },
         error: (err) => {
           this.cargando.set(false);

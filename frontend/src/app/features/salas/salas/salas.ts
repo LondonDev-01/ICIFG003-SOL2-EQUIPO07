@@ -1,4 +1,4 @@
-import { Component, OnInit, AfterViewChecked } from '@angular/core';
+import { Component, OnInit, AfterViewChecked, signal } from '@angular/core';
 import { SalaCard } from '../../../shared/components/sala-card/sala-card';
 import { CommonModule } from '@angular/common';
 import { SalaService } from './services/sala.service';
@@ -6,7 +6,6 @@ import { Sala } from './models/sala.model';
 import { ChangeDetectorRef } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
-import { AuthService } from '../../../core/services/auth.service';
 
 @Component({
   selector: 'app-salas',
@@ -27,7 +26,6 @@ export class Salas implements OnInit {
   textoBusqueda: string = '';
   capacidadSeleccionada: string = '';
   fechaSeleccionada: string = new Date().toISOString().split('T')[0];
-  fechaMinima: string = new Date().toISOString().split('T')[0];
   ordenSeleccionado: string = 'nombre';
   popupVisible = false;
   salaPopup: any = null;
@@ -35,31 +33,41 @@ export class Salas implements OnInit {
   todosHorarios: any[] = [];
   todasReservas: any[] = [];
 
+  readonly cargando = signal(true);
+  readonly error = signal<string | null>(null);
+
   constructor(
     private salaService: SalaService,
     private cdr: ChangeDetectorRef,
-    private router: Router,
-    private authService: AuthService
+    private router: Router
   ) {
     
   }
 
   ngOnInit(): void {
-    
+
+    this.cargando.set(true);
+    this.error.set(null);
+
     this.salaService.obtenerSalas().subscribe({
       next: (data) => {
 
       this.salas = data;
       this.salasFiltradas = data;
+      this.cargando.set(false);
 
       this.cdr.detectChanges();
 
   },
 
-  
+
 
   error: (error) => {
     console.error('ERROR:', error);
+    this.cargando.set(false);
+    this.error.set(
+      error.error?.message || 'No pudimos cargar las salas disponibles. Intenta nuevamente más tarde.'
+    );
   }
 });
   }
@@ -109,11 +117,6 @@ export class Salas implements OnInit {
   }
 
   irAReservar(salaId: number): void {
-    if (!this.authService.isAuthenticated()) {
-      alert('Para reservar una sala debes iniciar sesión');
-      this.router.navigate(['/login']);
-      return;
-    }
     this.router.navigate(
       ['/reservar'],
       {
@@ -149,25 +152,6 @@ export class Salas implements OnInit {
       default:
         return '/salas/sala101.png';
     }
-  }
-
-  obtenerTextoCapacidad(): string {
-
-    switch (this.capacidadSeleccionada) {
-
-      case '4':
-        return 'Hasta 4 personas';
-
-      case '8':
-        return 'Hasta 8 personas';
-
-      case '9':
-        return 'Más de 8 personas';
-
-      default:
-        return 'Todas las capacidades';
-    }
-
   }
 
   ngDoCheck(): void {
