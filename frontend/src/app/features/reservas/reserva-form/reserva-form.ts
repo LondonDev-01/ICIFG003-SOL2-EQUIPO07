@@ -91,7 +91,7 @@ export class ReservaForm implements OnInit {
 
   cargarReserva(): void {
     if (!this.reservaId) return;
-    this.http.get<any>(`http://localhost:8080/api/reservas/${this.reservaId}`).subscribe({
+    this.http.get<any>(`/api/reservas/${this.reservaId}`).subscribe({
       next: (reserva) => {
 
         const idS = reserva.idSala;
@@ -115,8 +115,8 @@ export class ReservaForm implements OnInit {
   }
 
   cargarCatalogos(): void {
-    this.http.get<any[]>('http://localhost:8080/api/carreras').subscribe((d) => this.carreras.set(d));
-    this.http.get<any[]>('http://localhost:8080/api/salas').subscribe((d) => {
+    this.http.get<any[]>('/api/carreras').subscribe((d) => this.carreras.set(d));
+    this.http.get<any[]>('/api/salas').subscribe((d) => {
       this.salas.set(d);
 
        const salaId= this.route.snapshot.queryParamMap.get('salaId');
@@ -127,8 +127,8 @@ export class ReservaForm implements OnInit {
         );
       }
     });
-    this.http.get<any[]>('http://localhost:8080/api/horarios').subscribe((d) => this.horarios.set(d));
-    this.http.get<any[]>('http://localhost:8080/api/estados-reserva').subscribe((d) => this.estados.set(d));
+    this.http.get<any[]>('/api/horarios').subscribe((d) => this.horarios.set(d));
+    this.http.get<any[]>('/api/estados-reserva').subscribe((d) => this.estados.set(d));
   }
 
   obtenerImagenSala(): string {
@@ -168,7 +168,7 @@ cargarReservas(): void {
 
   if (!salaId) return;
 
-  this.http.get<any[]>('http://localhost:8080/api/reservas')
+  this.http.get<any[]>('/api/reservas')
     .subscribe({
       next: (reservas) => {
 
@@ -244,7 +244,7 @@ cargarReservas(): void {
     };
 
     if (this.isEditMode && this.reservaId) {
-      this.http.put(`http://localhost:8080/api/reservas/${this.reservaId}`, body).subscribe({
+      this.http.put(`/api/reservas/${this.reservaId}`, body).subscribe({
         next: () => {
           this.cargando.set(false);
           alert('Reserva actualizada con éxito.');
@@ -268,7 +268,7 @@ cargarReservas(): void {
         }
       });
     } else {
-      this.http.post('http://localhost:8080/api/reservas', body).subscribe({
+      this.http.post('/api/reservas', body).subscribe({
         next: () => {
           this.cargando.set(false);
           this.exito.set(true);

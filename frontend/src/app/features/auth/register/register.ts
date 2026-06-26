@@ -44,7 +44,7 @@ export class Register implements OnInit {
       this.router.navigate(['/mis-reservas']);
       return;
     }
-    this.http.get<Carrera[]>('http://localhost:8080/api/carreras').subscribe({
+    this.http.get<Carrera[]>('/api/carreras').subscribe({
       next: (data) => this.carreras.set(data),
       error: () => this.carreras.set([])
     });

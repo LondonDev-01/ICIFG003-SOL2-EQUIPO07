@@ -36,7 +36,7 @@ export class MisReservas implements OnInit {
       }
     });
 
-    this.http.get<Reserva[]>('http://localhost:8080/api/reservas/mis-reservas').subscribe({
+    this.http.get<Reserva[]>('/api/reservas/mis-reservas').subscribe({
       next: (data) => {
         this.reservas.set(data);
         this.cargando.set(false);
@@ -50,7 +50,7 @@ export class MisReservas implements OnInit {
 
   cancelarReserva(id: number): void {
     if (!confirm('¿Estás seguro de cancelar esta reserva?\n\nEsta acción no se puede deshacer.')) return;
-    this.http.delete(`http://localhost:8080/api/reservas/${id}`).subscribe({
+    this.http.delete(`/api/reservas/${id}`).subscribe({
       next: () => {
         alert('Reserva cancelada correctamente.');
 

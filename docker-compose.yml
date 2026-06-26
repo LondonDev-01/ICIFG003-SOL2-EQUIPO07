@@ -40,6 +40,16 @@ services:
     networks:
       - reservas-net
 
+  frontend:
+    build: ./frontend
+    container_name: reservas-frontend
+    ports:
+      - "4200:80"
+    depends_on:
+      - backend
+    networks:
+      - reservas-net
+
 volumes:
   db_data:
 
