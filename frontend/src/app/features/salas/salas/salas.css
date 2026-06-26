@@ -1,18 +1,27 @@
-.salas-container {
-    padding:90px 70px 20px;
-    margin-top:-15px;
+.salas-container{
+    max-width:1400px;
+    margin:6.3rem auto;
+    padding:0 1.5rem;
 }
 
-.salas-container h1 {
-    color: #0a3575;
-    font-size:35px;
+.page-header{
+    margin-bottom:2rem;
+    padding-bottom:1rem;
+    border-bottom:1px solid #e5e7eb;
+}
+
+.page-header h1{
+    margin:0;
+    color:#0a3575;
+    font-size: 1.875rem;
     font-weight:700;
-    margin-bottom: 10px;
 }
 
-.salas-container p {
-    color: #555;
+.page-header p{
+    margin-top:.45rem;
+    color:#6b7280;
 }
+
 
 .salas-grid {
     display: grid;
@@ -109,19 +118,21 @@
 
 .barra-superior{
     display:flex;
-    align-items:flex-end;
+    align-items:center;
     gap:30px;
     background:white;
     padding:25px;
     border-radius:12px;
     box-shadow:0 2px 8px rgba(0,0,0,.08);
-    margin-bottom:30px;
+    margin-bottom:25px;
     flex-wrap:wrap;
 }
 
 .buscar{
     flex:0;
-    min-width:300px;
+    min-width:600px;
+    position:relative;
+    top:-7px;
 }
 
 .filtro-item input,

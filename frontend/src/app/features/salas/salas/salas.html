@@ -1,9 +1,19 @@
 <div class="salas-wrapper">
   <section class="salas-container">
     
-    <h1>Salas de Estudio</h1>
+    <header class="page-header">
 
-    <p>Encuentra y reserva la sala que mejor se adapte a tus necesidades.</p>
+        <div>
+
+            <h1>Salas de Estudio</h1>
+
+            <p>
+                Encuentra y reserva la sala que mejor se adapte a tus necesidades.
+            </p>
+
+        </div>
+
+    </header>
 
     <div class="barra-superior">
 
@@ -78,13 +88,14 @@
       Mostrando
       <strong>{{ salasFiltradas.length }}</strong>
 
+
       {{ salasFiltradas.length === 1 ? 'sala' : 'salas' }}
 
-      •
+      &nbsp;&nbsp;•&nbsp;&nbsp;
 
       {{ obtenerTextoCapacidad() }}
 
-      •
+      &nbsp;&nbsp;•&nbsp;&nbsp;
 
       {{ fechaSeleccionada | date:'dd/MM/yyyy' }}
 
