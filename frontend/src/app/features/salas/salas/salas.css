@@ -1,15 +1,17 @@
 .salas-container {
-    padding: 20px 80px 10px;
+    padding:90px 70px 20px;
+    margin-top:-15px;
 }
 
 .salas-container h1 {
     color: #0a3575;
+    font-size:35px;
+    font-weight:700;
     margin-bottom: 10px;
 }
 
 .salas-container p {
     color: #555;
-    
 }
 
 .salas-grid {
@@ -20,14 +22,9 @@
 
 .sala-card {
     background: white;
-
     border-radius: 12px;
-
     overflow: hidden;
-
     box-shadow: 0 4px 12px rgba(199, 12, 12, 0.08);
-    
-    
 }
 
 .sala-card img {
@@ -48,27 +45,19 @@
 
 .sala-card button {
     margin: 20px;
-
     background: #0a3575;
     color: white;
-
     border: none;
-
     padding: 12px 25px;
-
     border-radius: 8px;
-
     cursor: pointer;
 }
-
 
 
 .categoria select,
 .ordenar select {
     padding: 12px 16px;
-
     border: 1px solid #ddd;
-
     border-radius: 8px;
     width: 120px;
 }
@@ -85,12 +74,9 @@
 
 .ordenar {
     width:170px;
-
     display:flex;
     flex-direction:column;
-
     gap:8px;
-
     transform:none;
 }
 
@@ -159,85 +145,56 @@
     font-size:15px;
 }
 
-
-
 /* cuando no hay filtro aparecera mensaje*/
 .sin-resultados{
-
     margin-top:60px;
-
     text-align:center;
-
     padding:50px 20px;
-
     color:#6b7280;
 }
 
 .sin-resultados i{
-
     font-size:55px;
-
     color:#0a3575;
-
     margin-bottom:15px;
-
     display:block;
 }
 
 .sin-resultados h3{
-
     color:#0a3575;
-
     margin-bottom:10px;
-
     font-size:28px;
 }
 
 .sin-resultados p{
-
     font-size:16px;
-
     color:#666;
 }
 
 /* mensaje contador de salas disponibles */
 .contador-salas{
-
     margin-bottom:20px;
-
     color:#0a3575;
-
     font-size:18px;
-
     font-weight:600;
 }
 
 .resumen-filtros{
-
     margin-bottom:25px;
-
     padding:12px 18px;
-
     background:#eef4ff;
-
     border-left:4px solid #0a3575;
-
     border-radius:8px;
-
     color:#374151;
-
     font-size:16px;
 }
 
 .resumen-filtros i{
-
     color:#0a3575;
-
     margin-right:8px;
 }
 
 .resumen-filtros strong{
-
     color:#0a3575;
 }
 
@@ -254,9 +211,14 @@
     .salas-grid {
         grid-template-columns: repeat(2, 1fr);
     }
-
 }
 
+@media (max-width: 1200px){
+    .filtros{
+        flex-wrap: wrap;
+        gap:20px;
+    }
+}
 
 /* =========================
    MOVIL
@@ -295,6 +257,28 @@
 
     .salas-grid {
         grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 900px){
+    .filtros{
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .buscar,
+    .categoria,
+    .fecha,
+    .ordenar{
+        width:100%;
+
+    }
+
+    .buscar input,
+    .categoria select,
+    .fecha input,
+    .ordenar select{
+        width:100%;
     }
 
 }
