@@ -1,0 +1,48 @@
+services:
+  db:
+    image: mysql:8.4
+    container_name: reservas-db
+    env_file:
+      - .env
+    command: >
+      --lower_case_table_names=0
+      --character-set-server=utf8mb4
+      --collation-server=utf8mb4_unicode_ci
+    ports:
+      - "3306:3306"
+    volumes:
+      - db_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p${MYSQL_ROOT_PASSWORD}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+    networks:
+      - reservas-net
+
+  backend:
+    build: ./backend
+    container_name: reservas-backend
+    ports:
+      - "8080:8080"
+    env_file:
+      - .env
+    environment:
+      DB_HOST: db
+      DB_PORT: 3306
+      DB_NAME: ${DB_NAME:-reservas_db}
+      DB_USER: ${DB_USER:-root}
+      DB_PASSWORD: ${DB_PASSWORD:-1234}
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - reservas-net
+
+volumes:
+  db_data:
+
+networks:
+  reservas-net:
+    driver: bridge
