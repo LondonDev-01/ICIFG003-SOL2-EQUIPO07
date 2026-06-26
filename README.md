@@ -2,46 +2,93 @@
 
 Este repositorio contiene dos componentes principales: el backend (Spring Boot, Maven) y el frontend (Angular).
 
-**Descripción**: Aplicación para gestionar reservas de salas con API REST y una interfaz Angular.
+**Descripcion**: Aplicacion para gestionar reservas de salas con API REST y una interfaz Angular.
 
 **Requisitos**:
-- **Java 17**: JDK 17 instalado y `JAVA_HOME` configurado.
+- **Java 17**: JDK 17 instalado y `JAVA_HOME` configurado (solo para ejecucion local).
 - **Maven** (opcional): Si no desea usar el wrapper, instale Maven.
 - **Node.js & npm**: Recomendado Node 18+ y npm. El frontend usa Angular 21.
-- **PostgreSQL** (opcional): Por defecto la configuración apunta a una base PostgreSQL local.
+- **Docker + Docker Compose** (recomendado): Para levantar el stack completo (MySQL 8.4 + backend).
 
 **Estructura**:
 - `backend/` - API Spring Boot (Maven)
-- `frontend/` - Aplicación Angular
+- `frontend/` - Aplicacion Angular
 
-# **Configuración de Base de Datos**
+# **Configuracion de Base de Datos**
 
-1. Abrir PostgreSQL (psql):
+La aplicacion usa **MySQL 8.4**. Puede ejecutarla facilmente con Docker Compose (recomendado) o instalar MySQL localmente.
 
-```sql
-psql -U postgres
+## Opcion A: MySQL con Docker Compose (recomendado)
+
+No es necesario crear la base de datos manualmente. Docker Compose la crea automaticamente al iniciar el contenedor `db`.
+
+1. Copie el archivo de variables de entorno:
+
+```bash
+cp .env.example .env
+```
+
+2. (Opcional) Ajuste los valores en `.env`.
+
+## Opcion B: MySQL local (sin Docker)
+
+1. Abrir MySQL:
+
+```bash
+mysql -u root -p
 ```
 
 2. Crear la base de datos:
 
 ```sql
-CREATE DATABASE test;
+CREATE DATABASE reservas_db CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 ```
 
-**Importante:** No es necesario crear tablas ni insertar datos manualmente. El sistema genera automáticamente toda la estructura y los datos de prueba al iniciar el backend.
+3. Actualice `backend/src/main/resources/application.properties` o las variables de entorno segun su usuario/contrasena local.
+
+**Importante:** No es necesario crear tablas ni insertar datos manualmente. El sistema genera automaticamente toda la estructura y los datos de prueba al iniciar el backend.
 
 ---
 
-## **Arrancar el Backend (Windows)**
+## **Ejecutar con Docker**
 
-1. Abrir PowerShell o CMD.
-2. Ir al directorio del backend:
+Levanta el backend y la base de datos MySQL con un solo comando:
+
+```bash
+docker-compose up --build
+```
+
+- El backend estara disponible en: `http://localhost:8080`
+- MySQL escucha en el puerto `3306` del host.
+- El backend espera a que MySQL pase el healthcheck antes de iniciarse.
+
+Para detener los servicios:
+
+```bash
+docker-compose down
+```
+
+Para detener y eliminar el volumen de datos (base de datos limpia):
+
+```bash
+docker-compose down -v
+```
+
+---
+
+## **Ejecucion Local (sin Docker)**
+
+### **Arrancar el Backend (Windows)**
+
+1. Asegurese de tener MySQL corriendo localmente y la base de datos `reservas_db` creada.
+2. Abrir PowerShell o CMD.
+3. Ir al directorio del backend:
 
 ```powershell
 cd backend
 ```
 
-3. Ejecutar Spring Boot:
+4. Ejecutar Spring Boot:
 
 ```powershell
 .\mvnw.cmd spring-boot:run
@@ -53,15 +100,15 @@ o alternativamente:
 mvn spring-boot:run
 ```
 
-4. El backend quedará disponible en:
+5. El backend quedara disponible en:
 
 ```text
 http://localhost:8080
 ```
 
-### **¿Qué ocurre al iniciar el backend?**
+### **Que ocurre al iniciar el backend?**
 
-- Hibernate crea automáticamente el esquema (tablas y restricciones) desde las entidades JPA al iniciar la aplicación.
+- Hibernate crea automaticamente el esquema (tablas y restricciones) desde las entidades JPA al iniciar la aplicacion.
 - Se ejecuta el archivo `data.sql`, que carga los datos iniciales mediante sentencias DML.
 - Se cargan carreras, edificios, salas, horarios, estudiantes y reservas de prueba.
 
@@ -94,7 +141,7 @@ o:
 npm start
 ```
 
-5. El frontend quedará disponible en:
+5. El frontend quedara disponible en:
 
 ```text
 http://localhost:4200
@@ -112,7 +159,7 @@ Para probar el sistema puede utilizar el siguiente usuario:
 11.111.111-1
 ```
 
-**Contraseña**
+**Contrasena**
 
 ```text
 1234
