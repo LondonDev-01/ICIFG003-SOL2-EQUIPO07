@@ -34,6 +34,7 @@ export class ReservaForm implements OnInit {
   reservaId: number | null = null;
   salaSeleccionada: any = null;
   nombreUsuario = '';
+  fechaMinima = new Date().toISOString().split('T')[0];
 
   ngOnInit(): void {
 
@@ -246,8 +247,8 @@ cargarReservas(): void {
       this.http.put(`http://localhost:8080/api/reservas/${this.reservaId}`, body).subscribe({
         next: () => {
           this.cargando.set(false);
-          this.exito.set(true);
-          setTimeout(() => this.router.navigate(['/mis-reservas']), 1500);
+          alert('Reserva actualizada con éxito.');
+          this.router.navigate(['/mis-reservas']);
         },
         error: (err) => {
 
@@ -271,8 +272,19 @@ cargarReservas(): void {
         next: () => {
           this.cargando.set(false);
           this.exito.set(true);
-          this.reservaForm.reset();
-          setTimeout(() => this.router.navigate(['/mis-reservas']), 1500);
+
+          setTimeout(() => {
+
+            this.router.navigate(
+              ['/mis-reservas'],
+              {
+                queryParams: {
+                  actualizado: 'true'
+                }
+              }
+            );
+
+          }, 1500);
         },
         error: (err) => {
           this.cargando.set(false);
