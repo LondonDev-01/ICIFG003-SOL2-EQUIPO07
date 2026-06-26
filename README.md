@@ -61,8 +61,8 @@ http://localhost:8080
 
 ### **¿Qué ocurre al iniciar el backend?**
 
-- Hibernate crea automáticamente las tablas.
-- Se ejecuta el archivo `data.sql`.
+- Hibernate crea automáticamente el esquema (tablas y restricciones) desde las entidades JPA al iniciar la aplicación.
+- Se ejecuta el archivo `data.sql`, que carga los datos iniciales mediante sentencias DML.
 - Se cargan carreras, edificios, salas, horarios, estudiantes y reservas de prueba.
 
 ---
