@@ -1,41 +1,39 @@
 -- ============================================
 -- Script de poblacion de BD (datos de prueba)
 -- Sistema de Reservas de Salas
--- PostgreSQL
+-- MySQL
 -- ============================================
 -- Importante:
 --  * Orden de insercion: padres antes que hijos (por las FKs)
 --  * Se ejecuta DESPUES de que Hibernate cree el schema
 --    (gracias a spring.jpa.defer-datasource-initialization=true)
---  * ON CONFLICT DO NOTHING: el script es idempotente,
+--  * INSERT IGNORE INTO: el script es idempotente,
 --    se puede correr varias veces sin fallar por PK duplicada.
---  * Al final se sincronizan las secuencias IDENTITY con los MAX(id)
---    para que Hibernate siga insertando sin chocar con los id 1..5.
+--  * MySQL AUTO_INCREMENT se ajusta automaticamente tras los inserts
+--    con id explicito (innodb_autoinc_lock_mode=2 por defecto).
 
 -- ============================================
 -- 1. CARRERA
 -- ============================================
-INSERT INTO CARRERA (id, nombre_carrera, facultad) VALUES
+INSERT IGNORE INTO CARRERA (id, nombre_carrera, facultad) VALUES
 (1, 'Ingenieria en Informatica',  'Facultad de Ingenieria'),
 (2, 'Ingenieria Civil',          'Facultad de Ingenieria'),
 (3, 'Medicina',                  'Facultad de Ciencias Medicas'),
 (4, 'Derecho',                   'Facultad de Ciencias Juridicas'),
-(5, 'Administracion de Empresas','Facultad de Economia y Negocios')
-ON CONFLICT (id) DO NOTHING;
+(5, 'Administracion de Empresas','Facultad de Economia y Negocios');
 
 -- ============================================
 -- 2. EDIFICIO
 -- ============================================
-INSERT INTO EDIFICIO (id, nombre_edificio, direccion) VALUES
+INSERT IGNORE INTO EDIFICIO (id, nombre_edificio, direccion) VALUES
 (1, 'Biblioteca Central', 'Campus Central'),
 (2, 'Edificio B', 'Av. Universidad 1100'),
-(3, 'Edificio C', 'Av. Universidad 1200')
-ON CONFLICT (id) DO NOTHING;
+(3, 'Edificio C', 'Av. Universidad 1200');
 
 -- ============================================
 -- 3. ESTUDIANTE  (FK id_carrera -> CARRERA)
 -- ============================================
-INSERT INTO ESTUDIANTE
+INSERT IGNORE INTO ESTUDIANTE
 (id, rut, nombre, apellido, correo, telefono, fecha_registro, id_carrera, password)
 VALUES
 
@@ -82,26 +80,23 @@ VALUES
 '$2a$10$gLOPS30FomD3ZmIjNpYXgu7sVhowegagkiR4sVEYItG4CW7clulWO'),
 
 (15,'23.456.789-0','Nicolas','Fuentes','nicolas.fuentes@uss.cl','+56911111125','2026-03-10',5,
-'$2a$10$gLOPS30FomD3ZmIjNpYXgu7sVhowegagkiR4sVEYItG4CW7clulWO')
-
-ON CONFLICT (id) DO NOTHING;
+'$2a$10$gLOPS30FomD3ZmIjNpYXgu7sVhowegagkiR4sVEYItG4CW7clulWO');
 
 -- ============================================
 -- 4. SALA  (FK id_edificio -> EDIFICIO)
 -- ============================================
-INSERT INTO SALA (id, codigo_sala, nombre_sala, capacidad, piso, descripcion, estado, id_edificio) VALUES
+INSERT IGNORE INTO SALA (id, codigo_sala, nombre_sala, capacidad, piso, descripcion, estado, id_edificio) VALUES
 (1, 'A101', 'Sala A101', 6, 1, 'Sala de estudio grupal', 'Disponible', 1),
 (2, 'B202', 'Sala B202', 10, 2, 'Sala multimedia', 'Disponible', 1),
 (3, 'C303', 'Sala C303', 4, 3, 'Sala individual', 'Disponible', 1),
 (4, 'D404', 'Sala D404', 8, 4, 'Sala de estudio grupal', 'Disponible', 1),
 (5, 'E505', 'Sala E505', 8, 5, 'Sala de estudio grupal', 'Disponible', 1),
-(6, 'F606', 'Sala F606', 14, 6, 'Sala de estudio grupal', 'Disponible', 1)
-ON CONFLICT (id) DO NOTHING;
+(6, 'F606', 'Sala F606', 14, 6, 'Sala de estudio grupal', 'Disponible', 1);
 
 -- ============================================
 -- 5. HORARIO_DISPONIBLE  (FK id_sala -> SALA)
 -- ============================================
-INSERT INTO HORARIO_DISPONIBLE (id, hora_inicio, hora_termino, id_sala) VALUES
+INSERT IGNORE INTO HORARIO_DISPONIBLE (id, hora_inicio, hora_termino, id_sala) VALUES
 (1, '08:00:00', '09:30:00', 1),
 (2, '09:30:00', '11:00:00', 1),
 (3, '11:00:00', '12:30:00', 1),
@@ -109,19 +104,17 @@ INSERT INTO HORARIO_DISPONIBLE (id, hora_inicio, hora_termino, id_sala) VALUES
 (5, '15:30:00', '17:00:00', 1),
 (6, '17:00:00', '18:30:00', 1),
 (7, '18:30:00', '20:00:00', 1),
-(8, '20:00:00', '22:00:00', 1)
-ON CONFLICT (id) DO NOTHING;
+(8, '20:00:00', '22:00:00', 1);
 
 -- ============================================
 -- 6. ESTADO_RESERVA
 -- PK: id_estado (no "id" como el resto)
 -- ============================================
-INSERT INTO ESTADO_RESERVA (id_estado, nombre_estado) VALUES
+INSERT IGNORE INTO ESTADO_RESERVA (id_estado, nombre_estado) VALUES
 (1, 'Confirmada'),
 (2, 'Pendiente'),
 (3, 'Cancelada'),
-(4, 'Completada')
-ON CONFLICT (id_estado) DO NOTHING;
+(4, 'Completada');
 
 -- ============================================
 -- 7. RESERVA
@@ -130,7 +123,7 @@ ON CONFLICT (id_estado) DO NOTHING;
 --    FK id_horario    -> HORARIO_DISPONIBLE
 --    FK id_estado     -> ESTADO_RESERVA
 -- ============================================
-INSERT INTO RESERVA (id, fecha_reserva, observacion, fecha_creacion, id_estudiante, id_sala, id_horario, id_estado) VALUES
+INSERT IGNORE INTO RESERVA (id, fecha_reserva, observacion, fecha_creacion, id_estudiante, id_sala, id_horario, id_estado) VALUES
 (1,'2026-06-22','Trabajo de proyecto','2026-06-20 10:00:00',2,1,1,1),
 (2,'2026-06-22','Estudio grupal','2026-06-20 10:05:00',3,1,3,2),
 (3,'2026-06-22','Preparacion examen','2026-06-20 10:10:00',4,1,5,1),
@@ -169,49 +162,4 @@ INSERT INTO RESERVA (id, fecha_reserva, observacion, fecha_creacion, id_estudian
 
 (28,'2026-07-03','Reunion equipo','2026-07-01 10:00:00',15,1,2,1),
 (29,'2026-07-03','Estudio grupal','2026-07-01 10:05:00',2,1,4,2),
-(30,'2026-07-03','Trabajo de proyecto','2026-07-01 10:10:00',3,1,6,1)
-ON CONFLICT (id) DO NOTHING;
-
--- ============================================
--- Sincronizar secuencias IDENTITY
--- Hibernate usa IDENTITY (GENERATED BY DEFAULT AS IDENTITY en PG).
--- Como insertamos con id explicito, las secuencias quedan atras
--- y los siguientes inserts autogenerados chocarian con los id 1..5.
--- COALESCE maneja el caso "tabla vacia" -> setval(..., 1, false)
--- y el caso "tabla con datos" -> setval(MAX(id), true)
--- ============================================
-SELECT setval(
-  pg_get_serial_sequence('CARRERA',           'id'),
-  COALESCE((SELECT MAX(id)        FROM CARRERA),           1),
-  (SELECT COUNT(*) FROM CARRERA) > 0
-);
-SELECT setval(
-  pg_get_serial_sequence('EDIFICIO',          'id'),
-  COALESCE((SELECT MAX(id)        FROM EDIFICIO),          1),
-  (SELECT COUNT(*) FROM EDIFICIO) > 0
-);
-SELECT setval(
-  pg_get_serial_sequence('ESTUDIANTE',        'id'),
-  COALESCE((SELECT MAX(id)        FROM ESTUDIANTE),        1),
-  (SELECT COUNT(*) FROM ESTUDIANTE) > 0
-);
-SELECT setval(
-  pg_get_serial_sequence('SALA',              'id'),
-  COALESCE((SELECT MAX(id)        FROM SALA),              1),
-  (SELECT COUNT(*) FROM SALA) > 0
-);
-SELECT setval(
-  pg_get_serial_sequence('HORARIO_DISPONIBLE','id'),
-  COALESCE((SELECT MAX(id)        FROM HORARIO_DISPONIBLE),1),
-  (SELECT COUNT(*) FROM HORARIO_DISPONIBLE) > 0
-);
-SELECT setval(
-  pg_get_serial_sequence('ESTADO_RESERVA',    'id_estado'),
-  COALESCE((SELECT MAX(id_estado) FROM ESTADO_RESERVA),    1),
-  (SELECT COUNT(*) FROM ESTADO_RESERVA) > 0
-);
-SELECT setval(
-  pg_get_serial_sequence('RESERVA',           'id'),
-  COALESCE((SELECT MAX(id)        FROM RESERVA),           1),
-  (SELECT COUNT(*) FROM RESERVA) > 0
-);
+(30,'2026-07-03','Trabajo de proyecto','2026-07-01 10:10:00',3,1,6,1);
