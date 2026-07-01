@@ -60,13 +60,16 @@ export class Login implements OnInit {
     let valor = input.value.replace(/\./g, '');
     valor = valor.replace(/-/g, '');
 
+    // Solo permite números y K/k
+    valor = valor.replace(/[^0-9kK]/g, '');
+
     if (valor.length <= 1) {
       input.value = valor;
       this.form.get('rut')?.setValue(valor, { emitEvent: false });
       return;
     }
 
-    const dv = valor.slice(-1);
+    const dv = valor.slice(-1).toUpperCase();
     let cuerpo = valor.slice(0, -1);
 
     cuerpo = cuerpo.replace(/\B(?=(\d{3})+(?!\d))/g, '.');

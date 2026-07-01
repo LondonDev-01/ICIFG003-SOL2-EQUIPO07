@@ -1,0 +1,22 @@
+# Environment variables — NEVER commit real secrets
+.env
+*.env
+!.env.example
+
+# Dependencies
+node_modules/
+
+# Build outputs
+dist/
+build/
+target/
+
+# IDEs
+.idea/
+*.iml
+.vscode/
+*.swp
+
+# OS files
+.DS_Store
+Thumbs.db

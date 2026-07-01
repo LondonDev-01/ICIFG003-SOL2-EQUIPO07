@@ -33,6 +33,9 @@ export class ReservaForm implements OnInit {
   isEditMode = false;
   reservaId: number | null = null;
   salaSeleccionada: any = null;
+  /** Fecha de hoy en formato YYYY-MM-DD, usada como [min] del input de fecha
+   *  para que el selector nativo del navegador no permita elegir fechas pasadas. */
+  readonly fechaMinima = new Date().toISOString().split('T')[0];
   nombreUsuario = '';
 
   ngOnInit(): void {
@@ -114,20 +117,44 @@ export class ReservaForm implements OnInit {
   }
 
   cargarCatalogos(): void {
-    this.http.get<any[]>('http://localhost:8080/api/carreras').subscribe((d) => this.carreras.set(d));
-    this.http.get<any[]>('http://localhost:8080/api/salas').subscribe((d) => {
-      this.salas.set(d);
-
-       const salaId= this.route.snapshot.queryParamMap.get('salaId');
-
-      if (salaId) {
-        this.salaSeleccionada = d.find(
-          s => s.id === Number(salaId)
-        );
-      }
+    this.http.get<any[]>('http://localhost:8080/api/carreras').subscribe({
+      next: (d) => this.carreras.set(d),
+      error: (err) => this.mostrarErrorDeCatalogo(err)
     });
-    this.http.get<any[]>('http://localhost:8080/api/horarios').subscribe((d) => this.horarios.set(d));
-    this.http.get<any[]>('http://localhost:8080/api/estados-reserva').subscribe((d) => this.estados.set(d));
+    this.http.get<any[]>('http://localhost:8080/api/salas').subscribe({
+      next: (d) => {
+        this.salas.set(d);
+
+        const salaId = this.route.snapshot.queryParamMap.get('salaId');
+
+        if (salaId) {
+          this.salaSeleccionada = d.find(
+            s => s.id === Number(salaId)
+          );
+        }
+      },
+      error: (err) => this.mostrarErrorDeCatalogo(err)
+    });
+    this.http.get<any[]>('http://localhost:8080/api/horarios').subscribe({
+      next: (d) => this.horarios.set(d),
+      error: (err) => this.mostrarErrorDeCatalogo(err)
+    });
+    this.http.get<any[]>('http://localhost:8080/api/estados-reserva').subscribe({
+      next: (d) => this.estados.set(d),
+      error: (err) => this.mostrarErrorDeCatalogo(err)
+    });
+  }
+
+  /**
+   * Las llamadas de cargarCatalogos() son independientes entre sí; si una
+   * falla (ej. backend caído) mostramos el mensaje amigable sin tapar uno
+   * que ya esté seteado por otra de las mismas llamadas.
+   */
+  private mostrarErrorDeCatalogo(err: any): void {
+    if (this.error()) return;
+    this.error.set(
+      err.error?.message || 'No pudimos cargar los datos del formulario. Intenta nuevamente más tarde.'
+    );
   }
 
   obtenerImagenSala(): string {
@@ -186,7 +213,8 @@ cargarReservas(): void {
 
         this.horarios.set(horariosActualizados);
 
-      }
+      },
+      error: (err) => this.mostrarErrorDeCatalogo(err)
     });
 
 }

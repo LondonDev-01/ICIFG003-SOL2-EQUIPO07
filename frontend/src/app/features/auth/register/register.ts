@@ -46,7 +46,12 @@ export class Register implements OnInit {
     }
     this.http.get<Carrera[]>('http://localhost:8080/api/carreras').subscribe({
       next: (data) => this.carreras.set(data),
-      error: () => this.carreras.set([])
+      error: (err) => {
+        this.carreras.set([]);
+        this.error.set(
+          err.error?.message || 'No pudimos cargar las carreras disponibles. Intenta nuevamente más tarde.'
+        );
+      }
     });
   }
 

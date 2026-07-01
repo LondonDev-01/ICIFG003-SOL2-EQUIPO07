@@ -1,4 +1,4 @@
-import { Component, OnInit, AfterViewChecked } from '@angular/core';
+import { Component, OnInit, AfterViewChecked, signal } from '@angular/core';
 import { SalaCard } from '../../../shared/components/sala-card/sala-card';
 import { CommonModule } from '@angular/common';
 import { SalaService } from './services/sala.service';
@@ -33,6 +33,9 @@ export class Salas implements OnInit {
   todosHorarios: any[] = [];
   todasReservas: any[] = [];
 
+  readonly cargando = signal(true);
+  readonly error = signal<string | null>(null);
+
   constructor(
     private salaService: SalaService,
     private cdr: ChangeDetectorRef,
@@ -42,21 +45,29 @@ export class Salas implements OnInit {
   }
 
   ngOnInit(): void {
-    
+
+    this.cargando.set(true);
+    this.error.set(null);
+
     this.salaService.obtenerSalas().subscribe({
       next: (data) => {
 
       this.salas = data;
       this.salasFiltradas = data;
+      this.cargando.set(false);
 
       this.cdr.detectChanges();
 
   },
 
-  
+
 
   error: (error) => {
     console.error('ERROR:', error);
+    this.cargando.set(false);
+    this.error.set(
+      error.error?.message || 'No pudimos cargar las salas disponibles. Intenta nuevamente más tarde.'
+    );
   }
 });
   }

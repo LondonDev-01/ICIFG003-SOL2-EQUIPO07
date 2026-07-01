@@ -9,7 +9,7 @@ import { Sala } from '../models/sala.model';
 })
 export class SalaService {
 
-  private apiUrl = 'http://localhost:8080/api/salas';
+  private apiUrl = '/api/salas';
 
   constructor(private http: HttpClient) {}
 
@@ -19,13 +19,13 @@ export class SalaService {
 
   obtenerHorarios() {
     return this.http.get<any[]>(
-      'http://localhost:8080/api/horarios'
+      '/api/horarios'
     );
   }
 
   obtenerReservas() {
     return this.http.get<any[]>(
-      'http://localhost:8080/api/reservas'
+      '/api/reservas'
     );
   }
 }

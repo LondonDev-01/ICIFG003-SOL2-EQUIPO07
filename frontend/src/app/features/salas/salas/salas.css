@@ -288,3 +288,19 @@
     }
 
 }
+
+.error-msg {
+  background: #fef2f2;
+  color: #991b1b;
+  padding: 0.9rem 1rem;
+  border-radius: 8px;
+  margin-bottom: 1.2rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.cargando-msg {
+  color: #555;
+  padding: 1rem 0;
+}

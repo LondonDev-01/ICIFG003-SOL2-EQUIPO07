@@ -21,6 +21,8 @@ export class SalaCard {
 
   @Output() reservar = new EventEmitter<void>();
 
+  @Input() disponible = true;
+
   onReservar() {
     this.reservar.emit();
   }

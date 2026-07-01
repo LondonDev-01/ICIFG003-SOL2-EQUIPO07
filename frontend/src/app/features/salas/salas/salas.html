@@ -61,7 +61,16 @@
       </div>
     </div>
 
-    <div class="salas-grid">
+    <div *ngIf="error()" class="error-msg">
+      <i class="bi bi-exclamation-triangle-fill"></i>
+      {{ error() }}
+    </div>
+
+    <div *ngIf="cargando()" class="cargando-msg">
+      Cargando salas disponibles...
+    </div>
+
+    <div class="salas-grid" *ngIf="!cargando() && !error()">
       <app-sala-card
         *ngFor="let sala of salasFiltradas"
         [nombre]="sala.nombreSala"
